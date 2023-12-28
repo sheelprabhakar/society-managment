@@ -6,12 +6,10 @@ services:
     volumes:
       - ~/db/mysql:/var/lib/mysql
       - ./config.cnf:/etc/mysql/conf.d/config.cnf
-      - ./init-dump:/docker-entrypoint-initdb.d
     environment:
       TERM: xterm
       APP_ENV: dev
       MYSQL_USER: society-db
       MYSQL_PASSWORD: Password4
-      MYSQL_DATABASE: society-db
       MYSQL_ROOT_PASSWORD: Password4
     container_name: mysql-db
