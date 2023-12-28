@@ -1,15 +1,12 @@
 services:
   mysql:
-    image : mysql:5.7
+    image : mysql:8.0
     ports:
-      - "3306:3306"
+      - "33061:3306"
     volumes:
       - ~/db/mysql:/var/lib/mysql
-      - ./config.cnf:/etc/mysql/conf.d/config.cnf
     environment:
       TERM: xterm
       APP_ENV: dev
-      MYSQL_USER: society-db
-      MYSQL_PASSWORD: Password4
       MYSQL_ROOT_PASSWORD: Password4
     container_name: mysql-db
