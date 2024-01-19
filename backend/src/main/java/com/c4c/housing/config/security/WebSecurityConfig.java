@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
@@ -21,22 +22,17 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
 		// Entry points
-		http.csrf(csrf -> csrf.disable())
+		return http.csrf(csrf -> csrf.disable())
 		.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeRequests()//
 			.requestMatchers("/api/accounts/signin").permitAll()//
 			.requestMatchers("/api/accounts/signup").permitAll()//
 			.requestMatchers("/api/accounts/message").permitAll()//
 			.requestMatchers("/h2-console/**/**").permitAll()
-			.anyRequest().authenticated();
-
-		// Apply JWT
-		http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
-
-		// Optional, if you want to test the API from a browser
-		// http.httpBasic();
-		return http.build();
+			.anyRequest().authenticated().and().addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+				.build();
 	}
 
 	@Bean
