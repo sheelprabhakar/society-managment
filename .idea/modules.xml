@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/society-managment.iml" filepath="$PROJECT_DIR$/.idea/society-managment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/society-managment.backend.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/society-managment.main.iml" filepath="$PROJECT_DIR$/.idea/modules/society-managment.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/society-managment.test.iml" filepath="$PROJECT_DIR$/.idea/modules/society-managment.test.iml" />
     </modules>
   </component>
 </project>
