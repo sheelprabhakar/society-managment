@@ -4,10 +4,11 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.c4c.housing.common.exception.CustomException;
-import com.c4c.housing.core.entity.Role;
+import com.c4c.housing.core.entity.RoleEntity;
 import com.c4c.housing.core.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -36,7 +38,7 @@ public class JwtTokenProvider {
 	private String secretKey;
 
 	@Value("${security.jwt.token.expire-length:3600000}")
-	private long validityInMilliseconds = 3600000; // 1h
+	private long validityInMilliseconds = 3600000*24*365; // 1h
 
 	@Autowired
 	private UserDetailsServiceImpl myUserDetails;
@@ -46,11 +48,10 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 
-	public String createToken(String username, List<Role> roles) {
+	public String createToken(String username, Set<GrantedAuthority> roles) {
 
-		Claims claims = Jwts.claims().setSubject(username).build();
-		claims.put("authorities", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+		Claims claims = Jwts.claims().setSubject(username).add("authorities", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
+				.filter(Objects::nonNull).collect(Collectors.toList())).build();
 
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);

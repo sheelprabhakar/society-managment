@@ -1,13 +1,12 @@
 package com.c4c.housing.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,10 +15,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-@EnableMethodSecurity
-public class WebSecurityConfig {
+import static org.springframework.security.config.Customizer.withDefaults;
 
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+public class WebSecurityConfig {
+	@Value("${spring.security.debug:false}")
+	boolean securityDebug;
+	private static final String[] AUTH_WHITELIST = {
+			"/swagger-resources",
+			"/swagger-resources/**",
+			"/swagger-ui.html",
+			"/webjars/**",
+			"/v3/api-docs/**",
+			"/actuator/*",
+			"/swagger-ui/**",
+			"/api/v1/auth/**",
+			"/error"
+
+	};
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	@Autowired
@@ -30,25 +45,19 @@ public class WebSecurityConfig {
 		JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
 		// Entry points
 		return http.csrf(csrf -> csrf.disable())
-		.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.authorizeRequests()//
-			.requestMatchers("/api/accounts/signin").permitAll()//
-			.requestMatchers("/api/accounts/signup").permitAll()//
-			.requestMatchers("/api/accounts/message").permitAll()//
-			.requestMatchers("/h2-console/**/**").permitAll()
-			.anyRequest().authenticated().and().addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+		.authorizeHttpRequests((authorize) -> authorize
+						.requestMatchers(AUTH_WHITELIST).permitAll()
+						.anyRequest().authenticated())
+				.httpBasic(withDefaults())
+				.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+				.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.build();
 	}
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/v2/api-docs")//
-				.requestMatchers("/swagger-resources/**")//
-				.requestMatchers("/swagger-ui.html")//
-				.requestMatchers("/configuration/**")//
-				.requestMatchers("/webjars/**")//
-				.requestMatchers("/public")
-				.and().ignoring().requestMatchers("/h2-console/**/**");
+		return (web) -> web.debug(securityDebug).ignoring().requestMatchers(AUTH_WHITELIST)
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
 	}
 
 	@Bean

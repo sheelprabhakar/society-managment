@@ -13,6 +13,10 @@ import java.util.Calendar;
 @Setter
 @NoArgsConstructor
 public class CommonEntityAttributes {
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createdAt;

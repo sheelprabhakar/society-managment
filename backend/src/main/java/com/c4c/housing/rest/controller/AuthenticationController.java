@@ -5,17 +5,13 @@ import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@CrossOrigin
-@RequestMapping(UserController.BASE_URL)
+@RestController()
+@RequestMapping(AuthenticationController.BASE_URL)
 public class AuthenticationController {
 
     static final String BASE_URL = "/api/v1/auth";
@@ -26,7 +22,7 @@ public class AuthenticationController {
         this.restAdapterV1 = restAdapterV1;
     }
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
         String token = this.restAdapterV1.authenticate(authenticationRequest);

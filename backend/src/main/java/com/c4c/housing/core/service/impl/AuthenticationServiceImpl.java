@@ -1,22 +1,20 @@
 package com.c4c.housing.core.service.impl;
 
 import com.c4c.housing.config.security.JwtTokenProvider;
-import com.c4c.housing.core.entity.Role;
+import com.c4c.housing.core.entity.RoleEntity;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -55,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             final UserDetails userDetails = this.userDetailsService
                     .loadUserByUsername(username);
 
-            return this.jwtTokenProvider.createToken(userDetails.getUsername(), (List<Role>) userDetails.getAuthorities());
+            return this.jwtTokenProvider.createToken(userDetails.getUsername(), (Set<GrantedAuthority>) userDetails.getAuthorities());
         }else{
             throw new BadCredentialsException("INVALID_CREDENTIALS");
         }

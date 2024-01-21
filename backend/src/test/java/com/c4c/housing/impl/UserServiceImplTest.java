@@ -1,6 +1,5 @@
 package com.c4c.housing.impl;
 
-import com.c4c.housing.core.entity.Role;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.repository.UserRepository;
 import com.c4c.housing.core.service.impl.UserServiceImpl;
@@ -16,10 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

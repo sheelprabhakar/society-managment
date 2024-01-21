@@ -10,6 +10,7 @@ import java.util.Calendar;
 @Setter
 @NoArgsConstructor
 public class CommonResourceAttributes {
+    private boolean isDeleted;
     private Calendar createdAt;
     private Calendar updatedAt;
     private String createdBy;

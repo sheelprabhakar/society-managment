@@ -1,11 +1,8 @@
 package com.c4c.housing.utils;
 
-import com.c4c.housing.core.entity.Role;
 import com.c4c.housing.core.entity.UserEntity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 
 public class UserEntityHelper {
@@ -24,9 +21,6 @@ public class UserEntityHelper {
         entity.setMiddleName("s");
         entity.setPasswordHash("");
         entity.setFirstName("sheel");
-        List<Role> roles = new ArrayList<>();
-        roles.add(Role.ROLE_ADMIN);
-        entity.setRoles(roles);
 
         entity.setCreatedAt(Calendar.getInstance());
         entity.setUpdatedAt(Calendar.getInstance());

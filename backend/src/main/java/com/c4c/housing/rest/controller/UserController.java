@@ -6,6 +6,7 @@ import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserResource> add(@RequestBody UserResource userResource){
+    public ResponseEntity<UserResource> add(@RequestBody @Validated UserResource userResource){
         UserResource resource = this.restAdapterV1.save(userResource);
         return ResponseEntity.created(URI.create(BASE_URL+"users/"+resource.getId()))
                 .body(resource);

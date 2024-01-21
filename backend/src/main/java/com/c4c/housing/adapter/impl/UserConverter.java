@@ -20,7 +20,9 @@ public class UserConverter {
         resource.setMiddleName(entity.getMiddleName());
         resource.setPasswordHash("");
         resource.setFirstName(entity.getFirstName());
+        resource.setLocked(entity.isLocked());
 
+        resource.setDeleted(entity.isDeleted());
         resource.setCreatedAt(entity.getCreatedAt());
         resource.setUpdatedAt(entity.getUpdatedAt());
         resource.setCreatedBy(entity.getCreatedBy());
@@ -40,7 +42,9 @@ public class UserConverter {
         entity.setMiddleName(resource.getMiddleName());
         entity.setPasswordHash("");
         entity.setFirstName(resource.getFirstName());
+        entity.setLocked(resource.isLocked());
 
+        entity.setDeleted(resource.isDeleted());
         entity.setCreatedAt(resource.getCreatedAt());
         entity.setUpdatedAt(resource.getUpdatedAt());
         entity.setCreatedBy(resource.getCreatedBy());

@@ -6,7 +6,9 @@ import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -17,14 +19,18 @@ public class UserServiceImpl implements UserService {
     @Value("${society.management.otp.valid.duration:50000}")
     private long otpValidDuration = 500000;
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserServiceImpl(final UserRepository userRepository) {
+    public UserServiceImpl(final UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserEntity save(final UserEntity userEntity){
+        if(StringUtils.hasLength( userEntity.getPasswordHash())){
+            userEntity.setPasswordHash(this.passwordEncoder.encode( userEntity.getPasswordHash()));
+        }
         return this.userRepository.save(userEntity);
     }
 
@@ -40,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity update(final UserEntity userEntity) {
+        if(StringUtils.hasLength( userEntity.getPasswordHash())){
+            userEntity.setPasswordHash(this.passwordEncoder.encode( userEntity.getPasswordHash()));
+        }
         return this.userRepository.save(userEntity);
     }
 
