@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'checkstyle'
 	id 'org.springframework.boot' version '3.1.2'
 	id 'io.spring.dependency-management' version '1.1.2'
 	id 'io.freefair.lombok' version '8.4'
@@ -42,4 +43,11 @@ tasks.named('test') {
 }
 tasks.named("bootJar") {
 	launchScript()
+}
+
+tasks.withType(Checkstyle) {
+	reports {
+		xml.required = false
+		html.required = true
+	}
 }
