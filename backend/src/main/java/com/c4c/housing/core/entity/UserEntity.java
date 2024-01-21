@@ -12,20 +12,24 @@ import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class UserEntity extends CommonEntityAttributes {
 
-    public static final double OTP_VALID_DURATION = 5;
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID id;
 
     @Column(name = "first_name", length = 50)
     private String firstName;
@@ -55,10 +59,6 @@ public class UserEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar otpAt;
 
-    @Column(name = "registered_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar registeredAt;
-
     @Column(name = "last_login")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar lastLogin;
@@ -71,20 +71,8 @@ public class UserEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     List<Role> roles;
-    public boolean isOTPRequired() {
-        if (this.getOtp() == null) {
-            return false;
-        }
 
-        long currentTimeInMillis = System.currentTimeMillis();
-        long otpRequestedTimeInMillis = this.otpAt.getTimeInMillis();
 
-        if (otpRequestedTimeInMillis + OTP_VALID_DURATION < currentTimeInMillis) {
-            // OTP expires
-            return false;
-        }
 
-        return true;
-    }
 
 }

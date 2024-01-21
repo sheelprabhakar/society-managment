@@ -5,11 +5,17 @@ import com.c4c.housing.core.repository.UserRepository;
 import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    @Value("${society.management.otp.valid.duration:50000}")
+    private long otpValidDuration = 500000;
     private final UserRepository userRepository;
 
     @Autowired
@@ -23,8 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findById(final long id) {
+    public UserEntity findById(final UUID id) {
         return this.userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public UserEntity findByEmail(final String email) {
+        return this.userRepository.findByEmail(email);
     }
 
     @Override
@@ -38,14 +49,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isOTPRequired(Long id) {
+    public boolean isOTPRequired(UUID id) {
         UserEntity userEntity = this.userRepository.findById(id).orElse(null);
         if(userEntity == null){
             return false;
         }
-        return userEntity.isOTPRequired();
+        return this.isOTPRequired(userEntity);
     }
 
+    @Override
+    public boolean isOTPRequired(UserEntity userEntity) {
+        if (userEntity.getOtp() == null) {
+            return false;
+        }
+
+        long currentTimeInMillis = System.currentTimeMillis();
+        long otpRequestedTimeInMillis = userEntity.getOtpAt().getTimeInMillis();
+
+        if (otpRequestedTimeInMillis + this.otpValidDuration < currentTimeInMillis) {
+            // OTP expires
+            return false;
+        }
+
+        return true;
+    }
     public UserEntity delete(UserEntity userEntity) {
         return this.delete(userEntity);
     }

@@ -15,11 +15,16 @@ public class UserConverter {
         resource.setMobile(entity.getMobile());
         resource.setProfile(entity.getProfile());
         resource.setLastLogin(entity.getLastLogin());
-        resource.setRegisteredAt(entity.getRegisteredAt());
+
         resource.setLastName(entity.getLastName());
         resource.setMiddleName(entity.getMiddleName());
         resource.setPasswordHash("");
         resource.setFirstName(entity.getFirstName());
+
+        resource.setCreatedAt(entity.getCreatedAt());
+        resource.setUpdatedAt(entity.getUpdatedAt());
+        resource.setCreatedBy(entity.getCreatedBy());
+        resource.setUpdatedBy(entity.getUpdatedBy());
         return  resource;
     }
     public static UserEntity fromUserResource(final UserResource resource){
@@ -30,11 +35,16 @@ public class UserConverter {
         entity.setMobile(resource.getMobile());
         entity.setProfile(resource.getProfile());
         entity.setLastLogin(resource.getLastLogin());
-        entity.setRegisteredAt(resource.getRegisteredAt());
+
         entity.setLastName(resource.getLastName());
         entity.setMiddleName(resource.getMiddleName());
         entity.setPasswordHash("");
         entity.setFirstName(resource.getFirstName());
+
+        entity.setCreatedAt(resource.getCreatedAt());
+        entity.setUpdatedAt(resource.getUpdatedAt());
+        entity.setCreatedBy(resource.getCreatedBy());
+        entity.setUpdatedBy(resource.getUpdatedBy());
         return entity;
     }
 }

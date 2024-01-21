@@ -4,12 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class UserResource {
-    private Long id;
-
+public class UserResource extends CommonResourceAttributes{
+    private UUID id;
     private String firstName;
 
     private String middleName;
@@ -21,8 +21,6 @@ public class UserResource {
     private String email;
 
     private String passwordHash;
-
-    private Calendar registeredAt;
 
     private Calendar lastLogin;
 
