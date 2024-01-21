@@ -1,6 +1,10 @@
 package com.c4c.housing.config.security;
 
 import com.c4c.housing.common.exception.CustomException;
+import com.c4c.housing.core.entity.UserEntity;
+import com.c4c.housing.core.entity.UserTokenEntity;
+import com.c4c.housing.core.service.UserService;
+import com.c4c.housing.core.service.UserTokenService;
 import com.c4c.housing.core.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -9,9 +13,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,10 +38,18 @@ public class JwtTokenProvider {
 	@Value("${security.jwt.token.expire-length:3600000}")
 	private long validityInMilliseconds = 3600000*24*365; // 1h
 
-	@Autowired
-	private UserDetailsServiceImpl myUserDetails;
+	private final UserDetailsServiceImpl userDetailsService;
 
-	@PostConstruct
+	private final UserTokenService userTokenService;
+	private final UserService userService;
+
+    public JwtTokenProvider(UserDetailsServiceImpl userDetailsService, UserTokenService userTokenService, UserService userService) {
+        this.userDetailsService = userDetailsService;
+        this.userTokenService = userTokenService;
+        this.userService = userService;
+    }
+
+    @PostConstruct
 	protected void init() {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
@@ -62,7 +71,14 @@ public class JwtTokenProvider {
 	}
 
 	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
+		UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+		UserEntity user = this.userService.findByEmail(userDetails.getUsername());
+		if(user != null) {
+			UserTokenEntity userToken = this.userTokenService.getById(user.getId());
+			if (!userToken.getToken().equals(token)) {
+				throw new CustomException("Invalid token", HttpStatus.UNAUTHORIZED);
+			}
+		}
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 

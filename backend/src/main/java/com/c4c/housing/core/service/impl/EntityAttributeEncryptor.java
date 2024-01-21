@@ -21,8 +21,8 @@ import java.util.Base64;
 public class EntityAttributeEncryptor implements AttributeConverter<String, String>
 {
     private static final String AES = "AES";
-    @Value("${security.db.encryption.secret-key:security.db.encryption.secret-key}")
-    private String SECRET = "secret-key-98765432";
+    @Value("${security.db.encryption.secret-key:b7ynahtDw6vqj!5a}")
+    private String SECRET = "b7ynahtDw6vqj!5a";
 
     private final Key key;
     private final Cipher cipher;

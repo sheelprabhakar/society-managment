@@ -1,5 +1,7 @@
 package com.c4c.housing.config.security;
 
+import com.c4c.housing.core.service.UserService;
+import com.c4c.housing.core.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,8 +39,6 @@ public class WebSecurityConfig {
 	};
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
-	@Autowired
-	private UserDetailsService userDetailsService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -58,11 +58,6 @@ public class WebSecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.debug(securityDebug).ignoring().requestMatchers(AUTH_WHITELIST)
 				.requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(12);
 	}
 
 }
