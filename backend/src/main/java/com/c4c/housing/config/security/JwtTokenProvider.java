@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
-	private static final Logger logger = LogManager.getLogger(JwtTokenProvider.class);
 	@Value("${security.jwt.token.secret-key:secret-key}")
 	private String secretKey;
 
@@ -74,7 +75,7 @@ public class JwtTokenProvider {
 		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
 			return bearerToken.substring(7);
 		}
-		logger.info("Invalid Token");
+		log.info("Invalid Token");
 		return null;
 	}
 
@@ -83,7 +84,7 @@ public class JwtTokenProvider {
 			Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
-			logger.info("Expired or invalid JWT token");
+			log.info("Expired or invalid JWT token");
 			throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

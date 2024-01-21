@@ -74,6 +74,16 @@ CREATE TABLE `user_role` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+CREATE TABLE `user_token` (
+  `id` VARCHAR(36) NOT NULL,
+  `token` VARCHAR(4096) NOT NULL,
+  `updated_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_token_user_id`
+    FOREIGN KEY (`id`)
+    REFERENCES `user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 
 INSERT INTO `role` (`id`, `name`, `is_deleted`, `created_by`, `updated_by`) VALUES ('02ec9264-bdf8-4c56-971c-d4ab699e24e6', 'ADMIN', '0', 'SYSTEM', 'SYSTEM');

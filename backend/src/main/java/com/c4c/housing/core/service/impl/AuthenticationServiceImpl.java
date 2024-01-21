@@ -4,6 +4,7 @@ import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Logger logger = LogManager.getLogger(AuthenticationServiceImpl.class);
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
 
@@ -38,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         UserEntity userEntity = this.userService.findByEmail(username);
         if(userEntity == null){
-            logger.info("USER_NOT_FOUND");
+            log.info("USER_NOT_FOUND");
             throw new BadCredentialsException("USER_NOT_FOUND");
         }
         String encodePwd = "";
@@ -53,10 +54,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if(this.passwordEncoder.matches(password, encodePwd)) {
             final UserDetails userDetails = this.userDetailsService
                     .loadUserByUsername(username);
-            logger.info("Authenticated successfully");
+            log.info("Authenticated successfully");
             return this.jwtTokenProvider.createToken(userDetails.getUsername(), (Set<GrantedAuthority>) userDetails.getAuthorities());
         }else{
-            logger.info("Authenticated failed");
+            log.info("Authenticated failed");
             throw new BadCredentialsException("INVALID_CREDENTIALS");
         }
 
