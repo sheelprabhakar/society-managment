@@ -4,6 +4,8 @@ import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.repository.UserRepository;
 import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     @Value("${society.management.otp.valid.duration:50000}")
     private long otpValidDuration = 500000;
     private final UserRepository userRepository;
@@ -77,6 +79,7 @@ public class UserServiceImpl implements UserService {
 
         if (otpRequestedTimeInMillis + this.otpValidDuration < currentTimeInMillis) {
             // OTP expires
+            logger.info("OTP expired");
             return false;
         }
 

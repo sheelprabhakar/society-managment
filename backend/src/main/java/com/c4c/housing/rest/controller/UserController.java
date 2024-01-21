@@ -1,9 +1,9 @@
 package com.c4c.housing.rest.controller;
 
 import com.c4c.housing.adapter.RestAdapterV1;
-import com.c4c.housing.core.entity.UserEntity;
-import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +18,7 @@ import java.net.URI;
 @RestController( )
 @RequestMapping(UserController.BASE_URL)
 public class UserController {
+    private static final Logger logger = LogManager.getLogger(UserController.class);
     private final RestAdapterV1 restAdapterV1;
     static final String BASE_URL = "/api/v1/user";
     @Autowired

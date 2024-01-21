@@ -5,6 +5,8 @@ import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.entity.UserRoleEntity;
 import com.c4c.housing.core.repository.RoleRepository;
 import com.c4c.housing.core.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     @Autowired
@@ -30,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final UserEntity user = this.userRepository.findByEmail(username);
 
         if (user == null) {
+            logger.info("User Not found");
             throw new UsernameNotFoundException("User '" + username + "' not found");
         }
 
