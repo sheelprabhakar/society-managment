@@ -2,6 +2,7 @@ package com.c4c.housing.rest;
 
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.utils.TestUtils;
+import com.c4c.housing.utils.UserEntityHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class UserControllerTest extends AbstractIntegrationTest{
     public void test_add_user_ok() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_URL+"users")
-                        .content(TestUtils.convertObjectToJsonString( this.getNewUser()))
+                        .content(TestUtils.convertObjectToJsonString( UserEntityHelper.getNew(null)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -36,7 +37,7 @@ public class UserControllerTest extends AbstractIntegrationTest{
     public void test_update_user_ok() throws Exception {
         MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_URL + "users")
-                        .content(TestUtils.convertObjectToJsonString(this.getNewUser()))
+                        .content(TestUtils.convertObjectToJsonString(UserEntityHelper.getNew(null)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 //.andDo(print())
@@ -54,20 +55,5 @@ public class UserControllerTest extends AbstractIntegrationTest{
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mobile").value("1234567890"));
-    }
-
-    private UserResource getNewUser(){
-        UserResource userResource = new UserResource();
-        userResource.setEmail("ssp@c4c.com");
-        userResource.setIntro("");
-        userResource.setMobile(MOBILE);
-        userResource.setProfile("");
-        userResource.setLastLogin(null);
-        userResource.setRegisteredAt(Calendar.getInstance());
-        userResource.setLastName("prabhakar");
-        userResource.setMiddleName("s");
-        userResource.setPasswordHash("");
-        userResource.setFirstName("sheel");
-        return userResource;
     }
 }

@@ -4,31 +4,54 @@ import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.repository.UserRepository;
 import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.UUID;
 
 @Service
+@Slf4j
 @Transactional
 public class UserServiceImpl implements UserService {
+    @Value("${society.management.otp.valid.duration:50000}")
+    private long otpValidDuration = 500000;
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserServiceImpl(final UserRepository userRepository) {
+    public UserServiceImpl(final UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserEntity save(final UserEntity userEntity){
+        if(StringUtils.hasLength( userEntity.getPasswordHash())){
+            userEntity.setPasswordHash(this.passwordEncoder.encode( userEntity.getPasswordHash()));
+        }
         return this.userRepository.save(userEntity);
     }
 
     @Override
-    public UserEntity findById(final long id) {
+    public UserEntity findById(final UUID id) {
         return this.userRepository.findById(id).orElse(null);
     }
 
     @Override
+    public UserEntity findByEmail(final String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
+    @Override
     public UserEntity update(final UserEntity userEntity) {
+        if(StringUtils.hasLength( userEntity.getPasswordHash())){
+            userEntity.setPasswordHash(this.passwordEncoder.encode( userEntity.getPasswordHash()));
+        }
         return this.userRepository.save(userEntity);
     }
 
@@ -38,14 +61,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isOTPRequired(Long id) {
+    public boolean isOTPRequired(UUID id) {
         UserEntity userEntity = this.userRepository.findById(id).orElse(null);
         if(userEntity == null){
             return false;
         }
-        return userEntity.isOTPRequired();
+        return this.isOTPRequired(userEntity);
     }
 
+    @Override
+    public boolean isOTPRequired(UserEntity userEntity) {
+        if (userEntity.getOtp() == null) {
+            return false;
+        }
+
+        long currentTimeInMillis = System.currentTimeMillis();
+        long otpRequestedTimeInMillis = userEntity.getOtpAt().getTimeInMillis();
+
+        if (otpRequestedTimeInMillis + this.otpValidDuration < currentTimeInMillis) {
+            // OTP expires
+            log.info("OTP expired");
+            return false;
+        }
+
+        return true;
+    }
     public UserEntity delete(UserEntity userEntity) {
         return this.delete(userEntity);
     }

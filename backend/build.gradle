@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'checkstyle'
 	id 'org.springframework.boot' version '3.1.2'
 	id 'io.spring.dependency-management' version '1.1.2'
 	id 'io.freefair.lombok' version '8.4'
@@ -20,6 +21,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.sixhours:memcached-spring-boot-starter:2.5.0'
+	implementation 'org.hibernate:hibernate-validator:8.0.1.Final'
 
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
@@ -42,4 +45,11 @@ tasks.named('test') {
 }
 tasks.named("bootJar") {
 	launchScript()
+}
+
+tasks.withType(Checkstyle) {
+	reports {
+		xml.required = false
+		html.required = true
+	}
 }
