@@ -14,32 +14,72 @@ import org.hibernate.type.SqlTypes;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * The type Tenant entity.
+ */
 @Entity(name = "tenant")
 @Getter
 @Setter
 @NoArgsConstructor
 public class TenantEntity extends CommonEntityAttributes implements Serializable {
+    /**
+     * The constant L255.
+     */
+    private static final int L255 = 255;
+    /**
+     * The constant L512.
+     */
+    private static final int L512 = 512;
+    /**
+     * The constant L15.
+     */
+    private static final int L15 = 45;
+    /**
+     * The constant L8.
+     */
+    private static final int L8 = 8;
+    /**
+     * The Id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
-    @Column(name = "name", length = 255, nullable = false)
+    /**
+     * The Name.
+     */
+    @Column(name = "name", length = L255, nullable = false)
     private String name;
 
-    @Column(name = "email", length = 255, nullable = false)
+    /**
+     * The Email.
+     */
+    @Column(name = "email", length = L255, nullable = false)
     private String email;
 
-    @Column(name = "address", length = 512, nullable = true)
+    /**
+     * The Address.
+     */
+    @Column(name = "address", length = L512, nullable = true)
     private String address;
 
-    @Column(name = "pin", length = 8, nullable = true)
+    /**
+     * The Pin.
+     */
+    @Column(name = "pin", length = L8, nullable = true)
     private String pin;
 
-    @Column(name = "phone", length = 45, nullable = true)
+    /**
+     * The Phone.
+     */
+    @Column(name = "phone", length = L15, nullable = true)
     private String phone;
 
+    /**
+     * The Is active.
+     */
     @Column(name = "is_active", nullable = true)
     private Boolean isActive;
 }

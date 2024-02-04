@@ -6,8 +6,6 @@ import com.c4c.housing.core.entity.UserRoleEntity;
 import com.c4c.housing.core.repository.RoleRepository;
 import com.c4c.housing.core.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,19 +16,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The type User details service.
+ */
 @Service
 @Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
+    /**
+     * The User repository.
+     */
     private final UserRepository userRepository;
+    /**
+     * The Role repository.
+     */
     private final RoleRepository roleRepository;
+
+    /**
+     * Instantiates a new User details service.
+     *
+     * @param userRepository the user repository
+     * @param roleRepository the role repository
+     */
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserDetailsServiceImpl(final UserRepository userRepository, final RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
+    /**
+     * Load user by username user details.
+     *
+     * @param username the username
+     * @return the user details
+     * @throws UsernameNotFoundException the username not found exception
+     */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final UserEntity user = this.userRepository.findByEmail(username);
 
         if (user == null) {
@@ -39,7 +60,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         List<RoleEntity> roleEntities = new ArrayList<>();
-        for(UserRoleEntity e: user.getRoles()){
+        for (UserRoleEntity e : user.getRoles()) {
             RoleEntity entity = this.roleRepository.findById(e.getRoleId()).get();
             roleEntities.add(entity);
         }

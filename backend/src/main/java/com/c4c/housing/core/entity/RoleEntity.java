@@ -15,23 +15,41 @@ import org.springframework.security.core.GrantedAuthority;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * The type Role entity.
+ */
 @Entity(name = "role")
 @Getter
 @Setter
 @NoArgsConstructor
 public class RoleEntity extends CommonEntityAttributes implements GrantedAuthority, Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "id", nullable = false)
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	private UUID id;
+    /**
+     * The constant L50.
+     */
+    private static final int L50 = 50;
+    /**
+     * The Id.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID id;
 
-	@Column(name = "name", length = 50)
-	private String name;
+    /**
+     * The Name.
+     */
+    @Column(name = "name", length = L50)
+    private String name;
 
-	@Override
-	public String getAuthority() {
-		return name;
-	}
+    /**
+     * Gets authority.
+     *
+     * @return the authority
+     */
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 }

@@ -21,16 +21,32 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * The type User service impl test.
+ */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceImplTest {
 
+    /**
+     * The User service.
+     */
     @InjectMocks
     UserServiceImpl userService;
+    /**
+     * The User repository.
+     */
     @Mock
     UserRepository userRepository;
 
+    /**
+     * The User entity 1.
+     */
     UserEntity userEntity1 = UserEntityHelper.getNew(UUID.randomUUID());
+
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         UserEntity entity = userEntity1;
@@ -38,34 +54,44 @@ public class UserServiceImplTest {
         Mockito.when(userRepository.save(ArgumentMatchers.any()))
                 .thenReturn(entity);
 
-       Mockito.when(userRepository.findById(userEntity1.getId()))
+        Mockito.when(userRepository.findById(userEntity1.getId()))
                 .thenReturn(Optional.of(entity));
-       Mockito.when(userRepository.findById(ArgumentMatchers.eq(UUID.randomUUID())))
+        Mockito.when(userRepository.findById(ArgumentMatchers.eq(UUID.randomUUID())))
                 .thenReturn(Optional.empty());
 
     }
+
+    /**
+     * Test save ok.
+     */
     @Test
-    public void test_save_ok(){
+    public void test_save_ok() {
         UserEntity userEntity = this.userService.save(new UserEntity());
-        assertEquals(userEntity.getId(),userEntity1.getId());
+        assertEquals(userEntity.getId(), userEntity1.getId());
         assertNull(userEntity.getLastLogin());
     }
 
+    /**
+     * Test get ok.
+     */
     @Test
-    public void test_get_ok(){
+    public void test_get_ok() {
         UserEntity userEntity = this.userService.findById(userEntity1.getId());
-        assertEquals(userEntity.getId(),userEntity1.getId());
+        assertEquals(userEntity.getId(), userEntity1.getId());
         assertNull(userEntity.getLastLogin());
 
         userEntity = this.userService.findById(UUID.randomUUID());
         assertNull(userEntity);
     }
 
+    /**
+     * Test update ok.
+     */
     @Test
-    public void test_update_ok(){
+    public void test_update_ok() {
         UserEntity userEntity = this.userService.update(new UserEntity());
-        assertEquals(userEntity.getId(),userEntity1.getId());
-        assertEquals(userEntity.getMobile(),UserEntityHelper.MOBILE);
+        assertEquals(userEntity.getId(), userEntity1.getId());
+        assertEquals(userEntity.getMobile(), UserEntityHelper.MOBILE);
         assertNull(userEntity.getLastLogin());
     }
 }

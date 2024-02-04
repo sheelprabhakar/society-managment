@@ -5,10 +5,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * The type Web config.
+ */
 @Configuration
 public class WebConfig {
+
+    /**
+     * The constant STRENGTH.
+     */
+    private static final int STRENGTH = 12;
+
+    /**
+     * Password encoder password encoder.
+     *
+     * @return the password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        return new BCryptPasswordEncoder(STRENGTH);
     }
 }
