@@ -9,4 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableCaching
 public class CachingConfig {
+    // https://github.com/sixhours-team/memcached-spring-boot/blob/master/README.md
+
 }

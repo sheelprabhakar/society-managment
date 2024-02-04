@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity(name = "user_role")
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @IdClass(UserRoleId.class)
-public class UserRoleEntity extends CommonEntityAttributes {
+public class UserRoleEntity extends CommonEntityAttributes implements Serializable {
 
 	@Id
 	@Column(name = "role_id", nullable = false)

@@ -11,8 +11,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Calendar;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,11 +19,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest extends AbstractIntegrationTest{
     public static final String MOBILE = "9898989898";
     private final String BASE_URL="/api/v1/user/";
+
+
     @Test
     public void test_add_user_ok() throws Exception {
+
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_URL+"users")
                         .content(TestUtils.convertObjectToJsonString( UserEntityHelper.getNew(null)))
+                        .header("Authorization", getAdminToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity extends CommonEntityAttributes {
+public class UserEntity extends CommonEntityAttributes implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

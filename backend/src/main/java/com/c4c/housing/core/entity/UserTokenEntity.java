@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserTokenEntity {
+public class UserTokenEntity implements Serializable {
 
 	@Id
 	@Column(name = "id", nullable = false)

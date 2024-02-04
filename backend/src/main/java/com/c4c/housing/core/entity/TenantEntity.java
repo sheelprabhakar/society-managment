@@ -11,13 +11,14 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity(name = "tenant")
 @Getter
 @Setter
 @NoArgsConstructor
-public class TenantEntity extends CommonEntityAttributes{
+public class TenantEntity extends CommonEntityAttributes implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
