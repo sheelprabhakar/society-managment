@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent implements OnInit {
   public username: string = '';
   public password: string = '';
+  public rememberMe:boolean = false;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
