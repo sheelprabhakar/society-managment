@@ -4,8 +4,24 @@ import com.c4c.housing.core.entity.UserTokenEntity;
 
 import java.util.UUID;
 
+/**
+ * The interface User token service.
+ */
 public interface UserTokenService {
+    /**
+     * Gets by id.
+     *
+     * @param id the id
+     * @return the by id
+     */
     UserTokenEntity getById(UUID id);
 
+    /**
+     * Update user token entity.
+     *
+     * @param id    the id
+     * @param token the token
+     * @return the user token entity
+     */
     UserTokenEntity update(UUID id, String token);
 }

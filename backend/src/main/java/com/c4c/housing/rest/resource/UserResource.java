@@ -7,30 +7,66 @@ import lombok.NoArgsConstructor;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * The type User resource.
+ */
 @Data
 @NoArgsConstructor
-public class UserResource extends CommonResourceAttributes{
+public class UserResource extends CommonResourceAttributes {
+    /**
+     * The Id.
+     */
     private UUID id;
-    
+
+    /**
+     * The First name.
+     */
     private String firstName;
 
+    /**
+     * The Middle name.
+     */
     private String middleName;
 
+    /**
+     * The Last name.
+     */
     private String lastName;
 
+    /**
+     * The Mobile.
+     */
     @NotBlank
     private String mobile;
 
+    /**
+     * The Email.
+     */
     @NotBlank
     private String email;
 
+    /**
+     * The Password hash.
+     */
     private String passwordHash;
 
+    /**
+     * The Last login.
+     */
     private Calendar lastLogin;
 
+    /**
+     * The Intro.
+     */
     private String intro;
+    /**
+     * The Profile.
+     */
     private String profile;
 
+    /**
+     * The Is locked.
+     */
     private boolean isLocked;
 
 }

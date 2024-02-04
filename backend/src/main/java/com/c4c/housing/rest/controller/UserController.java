@@ -2,8 +2,7 @@ package com.c4c.housing.rest.controller;
 
 import com.c4c.housing.adapter.RestAdapterV1;
 import com.c4c.housing.rest.resource.UserResource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,26 +14,53 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-@RestController( )
+/**
+ * The type User controller.
+ */
+@Slf4j
+@RestController()
 @RequestMapping(UserController.BASE_URL)
 public class UserController {
-    private static final Logger logger = LogManager.getLogger(UserController.class);
+    /**
+     * The Rest adapter v 1.
+     */
     private final RestAdapterV1 restAdapterV1;
+    /**
+     * The Base url.
+     */
     static final String BASE_URL = "/api/v1/user";
+
+    /**
+     * Instantiates a new User controller.
+     *
+     * @param restAdapterV1 the rest adapter v 1
+     */
     @Autowired
     public UserController(final RestAdapterV1 restAdapterV1) {
         this.restAdapterV1 = restAdapterV1;
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<UserResource> add(@RequestBody @Validated UserResource userResource){
+    /**
+     * Add response entity.
+     *
+     * @param userResource the user resource
+     * @return the response entity
+     */
+    @PostMapping
+    public ResponseEntity<UserResource> add(final @RequestBody @Validated UserResource userResource) {
         UserResource resource = this.restAdapterV1.save(userResource);
-        return ResponseEntity.created(URI.create(BASE_URL+"users/"+resource.getId()))
+        return ResponseEntity.created(URI.create(BASE_URL + resource.getId()))
                 .body(resource);
     }
 
-    @PutMapping("/users")
-    public ResponseEntity<UserResource> update(@RequestBody UserResource userResource){
+    /**
+     * Update response entity.
+     *
+     * @param userResource the user resource
+     * @return the response entity
+     */
+    @PutMapping
+    public ResponseEntity<UserResource> update(final @RequestBody UserResource userResource) {
         UserResource resource = this.restAdapterV1.update(userResource);
         return ResponseEntity.ok(resource);
     }

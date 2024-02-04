@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * The interface User token repository.
+ */
 @Repository
 public interface UserTokenRepository extends CrudRepository<UserTokenEntity, UUID> {
 }

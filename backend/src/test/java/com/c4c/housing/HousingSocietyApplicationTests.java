@@ -5,26 +5,38 @@ import com.c4c.housing.core.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * The type Housing society application tests.
+ */
 @SpringBootTest
 class HousingSocietyApplicationTests {
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    /**
+     * The Password encoder.
+     */
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	@Autowired
-	UserRepository userRepository;
-	@Test
-	void contextLoads() {
-		System.out.println(passwordEncoder.encode("admin123"));
+    /**
+     * The User repository.
+     */
+    @Autowired
+    UserRepository userRepository;
 
-		for (UserEntity userEntity : userRepository.findAll()) {
+    /**
+     * Context loads.
+     */
+    @Test
+    void contextLoads() {
+        System.out.println(passwordEncoder.encode("admin123"));
 
-			System.out.println( userEntity.getRoles().get(0));
-		}
+        for (UserEntity userEntity : userRepository.findAll()) {
 
-	}
+            System.out.println(userEntity.getRoles().get(0));
+        }
+
+    }
 
 }

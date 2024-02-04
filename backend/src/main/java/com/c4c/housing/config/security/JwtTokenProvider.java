@@ -28,81 +28,147 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The type Jwt token provider.
+ */
 @Component
 @Slf4j
 public class JwtTokenProvider {
 
-	@Value("${security.jwt.token.secret-key:secret-key}")
-	private String secretKey;
+    /**
+     * The constant BEARER_LENGTH.
+     */
+    private static final int BEARER_LENGTH = 7;
 
-	@Value("${security.jwt.token.expire-length:3600000}")
-	private long validityInMilliseconds = 3600000*24*365; // 1h
+    /**
+     * The Secret key.
+     */
+    @Value("${security.jwt.token.secret-key:secret-key}")
+    private String secretKey;
 
-	private final UserDetailsServiceImpl userDetailsService;
+    /**
+     * The Validity in milliseconds.
+     */
+    @Value("${security.jwt.token.expire-length:3600000}")
+    private final long validityInMilliseconds = 3600000L * 24 * 365; // 1h
 
-	private final UserTokenService userTokenService;
-	private final UserService userService;
+    /**
+     * The User details service.
+     */
+    private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtTokenProvider(UserDetailsServiceImpl userDetailsService, UserTokenService userTokenService, UserService userService) {
+    /**
+     * The User token service.
+     */
+    private final UserTokenService userTokenService;
+    /**
+     * The User service.
+     */
+    private final UserService userService;
+
+    /**
+     * Instantiates a new Jwt token provider.
+     *
+     * @param userDetailsService the user details service
+     * @param userTokenService   the user token service
+     * @param userService        the user service
+     */
+    public JwtTokenProvider(final UserDetailsServiceImpl userDetailsService, final UserTokenService userTokenService,
+                            final UserService userService) {
         this.userDetailsService = userDetailsService;
         this.userTokenService = userTokenService;
         this.userService = userService;
     }
 
+    /**
+     * Init.
+     */
     @PostConstruct
-	protected void init() {
-		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-	}
+    protected void init() {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    }
 
-	public String createToken(String username, Set<GrantedAuthority> roles) {
+    /**
+     * Create token string.
+     *
+     * @param username the username
+     * @param roles    the roles
+     * @return the string
+     */
+    public String createToken(final String username, final Set<GrantedAuthority> roles) {
 
-		Claims claims = Jwts.claims().setSubject(username).add("authorities", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-				.filter(Objects::nonNull).collect(Collectors.toList())).build();
+        Claims claims = Jwts.claims().setSubject(username).add("authorities", roles.stream().map(
+                s -> new SimpleGrantedAuthority(s.getAuthority()))
+                .filter(Objects::nonNull).collect(Collectors.toList())).build();
 
-		Date now = new Date();
-		Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-		return Jwts.builder()//
-				.setClaims(claims)//
-				.setIssuedAt(now)//
-				.setExpiration(validity)//
-				.signWith(SignatureAlgorithm.HS256, secretKey)//
-				.compact();
-	}
+        return Jwts.builder()//
+                .setClaims(claims)//
+                .setIssuedAt(now)//
+                .setExpiration(validity)//
+                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .compact();
+    }
 
-	public Authentication getAuthentication(String token) {
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-		UserEntity user = this.userService.findByEmail(userDetails.getUsername());
-		if(user != null) {
-			UserTokenEntity userToken = this.userTokenService.getById(user.getId());
-			if (!userToken.getToken().equals(token)) {
-				throw new CustomException("Invalid token", HttpStatus.UNAUTHORIZED);
-			}
-		}
-		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-	}
+    /**
+     * Gets authentication.
+     *
+     * @param token the token
+     * @return the authentication
+     */
+    public Authentication getAuthentication(final String token) {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+        UserEntity user = this.userService.findByEmail(userDetails.getUsername());
+        if (user != null) {
+            UserTokenEntity userToken = this.userTokenService.getById(user.getId());
+            if (!userToken.getToken().equals(token)) {
+                throw new CustomException("Invalid token", HttpStatus.UNAUTHORIZED);
+            }
+        }
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
 
-	public String getUsername(String token) {
-		return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
-	}
+    /**
+     * Gets username.
+     *
+     * @param token the token
+     * @return the username
+     */
+    public String getUsername(final String token) {
+        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+    }
 
-	public String resolveToken(HttpServletRequest req) {
-		String bearerToken = req.getHeader("Authorization");
-		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7);
-		}
-		log.info("Invalid Token");
-		return null;
-	}
+    /**
+     * Resolve token string.
+     *
+     * @param req the req
+     * @return the string
+     */
+    public String resolveToken(final HttpServletRequest req) {
+        String bearerToken = req.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(BEARER_LENGTH);
+        }
+        log.info("Invalid Token");
+        return null;
+    }
 
-	public boolean validateToken(String token) {
-		try {
-			Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
-			return true;
-		} catch (JwtException | IllegalArgumentException e) {
-			log.info("Expired or invalid JWT token");
-			throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    /**
+     * Validate token boolean.
+     *
+     * @param token the token
+     * @return the boolean
+     */
+    public boolean validateToken(final String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.info("Expired or invalid JWT token");
+            throw new CustomException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

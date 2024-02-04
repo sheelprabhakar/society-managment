@@ -1,10 +1,7 @@
 package com.c4c.housing.core.service.impl;
 
 import jakarta.persistence.AttributeConverter;
-
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +13,49 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.Base64;
 
+/**
+ * The type Entity attribute encryptor.
+ */
 @Slf4j
 @Component
-public class EntityAttributeEncryptor implements AttributeConverter<String, String>
-{
+public class EntityAttributeEncryptor implements AttributeConverter<String, String> {
+    /**
+     * The constant AES.
+     */
     private static final String AES = "AES";
+    /**
+     * The Secret.
+     */
     @Value("${security.db.encryption.secret-key:b7ynahtDw6vqj!5a}")
-    private String SECRET = "b7ynahtDw6vqj!5a";
+    private final String secret = "b7ynahtDw6vqj!5a";
 
+    /**
+     * The Key.
+     */
     private final Key key;
+    /**
+     * The Cipher.
+     */
     private final Cipher cipher;
 
+    /**
+     * Instantiates a new Entity attribute encryptor.
+     *
+     * @throws Exception the exception
+     */
     public EntityAttributeEncryptor() throws Exception {
-        key = new SecretKeySpec(SECRET.getBytes(), AES);
+        key = new SecretKeySpec(secret.getBytes(), AES);
         cipher = Cipher.getInstance(AES);
     }
 
+    /**
+     * Convert to database column string.
+     *
+     * @param attribute the attribute
+     * @return the string
+     */
     @Override
-    public String convertToDatabaseColumn(String attribute) {
+    public String convertToDatabaseColumn(final String attribute) {
         try {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return Base64.getEncoder().encodeToString(cipher.doFinal(attribute.getBytes()));
@@ -43,8 +65,14 @@ public class EntityAttributeEncryptor implements AttributeConverter<String, Stri
         }
     }
 
+    /**
+     * Convert to entity attribute string.
+     *
+     * @param dbData the db data
+     * @return the string
+     */
     @Override
-    public String convertToEntityAttribute(String dbData) {
+    public String convertToEntityAttribute(final String dbData) {
         try {
             cipher.init(Cipher.DECRYPT_MODE, key);
             return new String(cipher.doFinal(Base64.getDecoder().decode(dbData)));

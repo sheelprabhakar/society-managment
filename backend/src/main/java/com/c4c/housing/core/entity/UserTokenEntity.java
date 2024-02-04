@@ -13,25 +13,42 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * The type User token entity.
+ */
 @Entity(name = "user_token")
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserTokenEntity {
+public class UserTokenEntity implements Serializable {
 
-	@Id
-	@Column(name = "id", nullable = false)
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	private UUID id;
+    /**
+     * The constant TOKEN_MAX_LENGTH.
+     */
+    private static final int TOKEN_MAX_LENGTH = 4096;
+    /**
+     * The Id.
+     */
+    @Id
+    @Column(name = "id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID id;
 
-	@Column(name = "token", nullable = false, length = 4096)
-	@Convert(converter = EntityAttributeEncryptor.class)
-	private String token;
+    /**
+     * The Token.
+     */
+    @Column(name = "token", nullable = false, length = TOKEN_MAX_LENGTH)
+    @Convert(converter = EntityAttributeEncryptor.class)
+    private String token;
 
-	@Column(name = "updated_at", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar updatedAt;
+    /**
+     * The Updated at.
+     */
+    @Column(name = "updated_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar updatedAt;
 }

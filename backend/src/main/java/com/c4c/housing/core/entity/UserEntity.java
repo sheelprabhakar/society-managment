@@ -16,65 +16,126 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type User entity.
+ */
 @Entity(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity extends CommonEntityAttributes {
+public class UserEntity extends CommonEntityAttributes implements Serializable {
 
+    /**
+     * The constant NAME_MAX.
+     */
+    private static final int NAME_MAX = 50;
+    /**
+     * The constant HASH_MAX.
+     */
+    private static final int HASH_MAX = 64;
+    /**
+     * The constant MOBILE_MAX.
+     */
+    private static final int MOBILE_MAX = 15;
+    /**
+     * The Id.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
-    @Column(name = "first_name", length = 50)
+    /**
+     * The First name.
+     */
+    @Column(name = "first_name", length = NAME_MAX)
     private String firstName;
 
-    @Column(name = "middle_name", length = 50)
+    /**
+     * The Middle name.
+     */
+    @Column(name = "middle_name", length = NAME_MAX)
     private String middleName;
 
-    @Column(name = "last_name", length = 50)
+    /**
+     * The Last name.
+     */
+    @Column(name = "last_name", length = NAME_MAX)
     private String lastName;
 
-    @Column(name = "mobile", length = 15)
+    /**
+     * The Mobile.
+     */
+    @Column(name = "mobile", length = MOBILE_MAX)
     private String mobile;
 
-    @Column(name = "user_name", length = 50)
+    /**
+     * The User name.
+     */
+    @Column(name = "user_name", length = NAME_MAX)
     private String userName;
 
-    @Column(name = "email", length = 50)
+    /**
+     * The Email.
+     */
+    @Column(name = "email", length = NAME_MAX)
     private String email;
 
-    @Column(name = "password_hash", length = 64, nullable = false)
+    /**
+     * The Password hash.
+     */
+    @Column(name = "password_hash", length = HASH_MAX, nullable = false)
     private String passwordHash;
 
-    @Column(name = "otp", length = 64, nullable = false)
+    /**
+     * The Otp.
+     */
+    @Column(name = "otp", length = HASH_MAX, nullable = false)
     private String otp;
 
+    /**
+     * The Otp at.
+     */
     @Column(name = "otp_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar otpAt;
 
+    /**
+     * The Last login.
+     */
     @Column(name = "last_login")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar lastLogin;
 
+    /**
+     * The Intro.
+     */
     @Column(name = "intro")
     private String intro;
 
+    /**
+     * The Profile.
+     */
     @Column(name = "profile")
     private String profile;
 
+    /**
+     * The Is locked.
+     */
     @Column(name = "is_locked", nullable = false)
     private boolean isLocked;
 
+    /**
+     * The Roles.
+     */
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private List<UserRoleEntity> roles;
 
 }

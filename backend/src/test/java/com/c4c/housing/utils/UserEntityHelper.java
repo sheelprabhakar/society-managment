@@ -5,10 +5,28 @@ import com.c4c.housing.core.entity.UserEntity;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * The type User entity helper.
+ */
 public class UserEntityHelper {
+    /**
+     * The constant MOBILE.
+     */
     public static final String MOBILE = "9898989898";
-    private UserEntityHelper(){}
-    public static UserEntity getNew(UUID id){
+
+    /**
+     * Instantiates a new User entity helper.
+     */
+    private UserEntityHelper() {
+    }
+
+    /**
+     * Gets new.
+     *
+     * @param id the id
+     * @return the new
+     */
+    public static UserEntity getNew(final UUID id) {
         UserEntity entity = new UserEntity();
         entity.setId(id);
         entity.setEmail("ssp@c4c.com");

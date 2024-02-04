@@ -3,11 +3,24 @@ package com.c4c.housing.adapter.impl;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.rest.resource.UserResource;
 
-public class UserConverter {
-    private UserConverter(){
+/**
+ * The type User converter.
+ */
+public final class UserConverter {
+    /**
+     * Instantiates a new User converter.
+     */
+    private UserConverter() {
 
     }
-    public static UserResource fromUserEntity(final UserEntity entity){
+
+    /**
+     * From user entity user resource.
+     *
+     * @param entity the entity
+     * @return the user resource
+     */
+    public static UserResource fromUserEntity(final UserEntity entity) {
         UserResource resource = new UserResource();
         resource.setId(entity.getId());
         resource.setEmail(entity.getEmail());
@@ -27,9 +40,16 @@ public class UserConverter {
         resource.setUpdatedAt(entity.getUpdatedAt());
         resource.setCreatedBy(entity.getCreatedBy());
         resource.setUpdatedBy(entity.getUpdatedBy());
-        return  resource;
+        return resource;
     }
-    public static UserEntity fromUserResource(final UserResource resource){
+
+    /**
+     * From user resource user entity.
+     *
+     * @param resource the resource
+     * @return the user entity
+     */
+    public static UserEntity fromUserResource(final UserResource resource) {
         UserEntity entity = new UserEntity();
         entity.setId(resource.getId());
         entity.setEmail(resource.getEmail());
