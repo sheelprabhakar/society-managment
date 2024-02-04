@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 
 @Component({
   selector: 'app-expansion',
   standalone: true,
-  imports: [DemoMaterialModule],
+  imports: [SMMaterialModule],
   templateUrl: './expansion.component.html',
   styleUrls: ['./expansion.component.scss']
 })

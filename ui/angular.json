@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "material-pro-angular-lite:build:production"
+              "buildTarget": "material-pro-angular-lite:build:production"
             },
             "development": {
-              "browserTarget": "material-pro-angular-lite:build:development"
+              "buildTarget": "material-pro-angular-lite:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "material-pro-angular-lite:build"
+            "buildTarget": "material-pro-angular-lite:build"
           }
         },
         "test": {

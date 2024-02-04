@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Contact, contacts } from './contact-data';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-contacts',
   standalone: true,
-  imports: [DemoMaterialModule, NgFor],
+  imports: [SMMaterialModule, NgFor],
   templateUrl: './contacts.component.html'
 })
 export class ContactsComponent implements OnInit {

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [DemoMaterialModule],
+  imports: [SMMaterialModule],
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnInit {

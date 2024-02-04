@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 
 @Component({
   selector: 'app-buttons',
   standalone: true,
-  imports: [DemoMaterialModule, MatButtonModule],
+  imports: [SMMaterialModule, MatButtonModule],
   templateUrl: './buttons.component.html',
   styleUrls: ['./buttons.component.scss']
 })

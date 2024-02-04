@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 
 @Component({
   selector: 'app-tabs',
   standalone: true,
-  imports:[DemoMaterialModule, MatTabsModule],
+  imports:[SMMaterialModule, MatTabsModule],
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss']
 })

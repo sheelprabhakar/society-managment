@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
-import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { SMMaterialModule } from 'src/app/sm.material.module';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [DemoMaterialModule, MatMenuModule],
+  imports: [SMMaterialModule, MatMenuModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })

@@ -10,7 +10,7 @@ import {
   ApexResponsive,
   NgApexchartsModule,
 } from "ng-apexcharts";
-import { DemoMaterialModule } from "src/app/demo-material-module";
+import { SMMaterialModule } from "src/app/sm.material.module";
 
 export interface VisitorChartOptions {
   series: ApexNonAxisChartSeries | any;
@@ -28,7 +28,7 @@ export interface VisitorChartOptions {
 @Component({
   selector: "app-our-visiter",
   standalone: true,
-  imports: [NgApexchartsModule, DemoMaterialModule],
+  imports: [NgApexchartsModule, SMMaterialModule],
   templateUrl: "./our-visiter.component.html"
 })
 export class OurVisiterComponent {
