@@ -1,35 +1,33 @@
 package com.c4c.housing.rest.resource.auth;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 /**
  * The type Jwt response.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JwtResponse implements Serializable {
     /**
      * The constant serialVersionUID.
      */
     private static final long serialVersionUID = -8091879091924046844L;
-    /**
-     * The Jwttoken.
-     */
-    private final String jwttoken;
 
     /**
-     * Instantiates a new Jwt response.
-     *
-     * @param jwttoken the jwttoken
+     * The Access token.
      */
-    public JwtResponse(final String jwttoken) {
-        this.jwttoken = jwttoken;
-    }
+    private String accessToken;
 
     /**
-     * Gets token.
-     *
-     * @return the token
+     * The Refresh token.
      */
-    public String getToken() {
-        return this.jwttoken;
-    }
+    private String refreshToken;
+
 }

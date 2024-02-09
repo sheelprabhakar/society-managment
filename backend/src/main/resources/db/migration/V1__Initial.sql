@@ -75,12 +75,13 @@ CREATE TABLE `user_role` (
     ON UPDATE CASCADE);
 
 CREATE TABLE `user_token` (
-  `id` VARCHAR(36) NOT NULL,
-  `token` VARCHAR(4096) NOT NULL,
+  `user_id` VARCHAR(36) NOT NULL,
+  `access_token` VARCHAR(4096) NOT NULL,
+  `refresh_token` VARCHAR(4096) NOT NULL,
   `updated_at` DATETIME NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`user_id`),
   CONSTRAINT `fk_token_user_id`
-    FOREIGN KEY (`id`)
+    FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);

@@ -46,23 +46,36 @@ public class UserTokenServiceImpl implements UserTokenService {
     /**
      * Update user token entity.
      *
-     * @param id    the id
-     * @param token the token
+     * @param id           the id
+     * @param token        the token
+     * @param refreshToken
      * @return the user token entity
      */
     @Override
     @CacheEvict(value = "tokens", key = "#id.toString()")
-    public UserTokenEntity update(final UUID id, final String token) {
+    public UserTokenEntity update(final UUID id, final String token, final String refreshToken) {
         UserTokenEntity tokenEntity = this.userTokenRepository.findById(id).orElse(null);
         if (tokenEntity == null) {
             tokenEntity = new UserTokenEntity();
-            tokenEntity.setId(id);
+            tokenEntity.setUserId(id);
         }
 
-        tokenEntity.setToken(token);
+        tokenEntity.setAccessToken(token);
+        tokenEntity.setRefreshToken(refreshToken);
         tokenEntity.setUpdatedAt(Calendar.getInstance());
 
         return this.userTokenRepository.save(tokenEntity);
+    }
+
+    /**
+     * Delete by id.
+     *
+     * @param id the id
+     */
+    @Override
+    @CacheEvict(value = "tokens", key = "#id.toString()")
+    public void deleteById(final UUID id) {
+        this.userTokenRepository.deleteById(id);
     }
 
 }

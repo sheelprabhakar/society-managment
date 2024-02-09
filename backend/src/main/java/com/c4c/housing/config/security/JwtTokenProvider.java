@@ -23,8 +23,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,10 @@ public class JwtTokenProvider {
      * The constant BEARER_LENGTH.
      */
     private static final int BEARER_LENGTH = 7;
+    /**
+     * The constant FIVE_.
+     */
+    public static final int FIVE_ = 5;
 
     /**
      * The Secret key.
@@ -50,7 +56,7 @@ public class JwtTokenProvider {
      * The Validity in milliseconds.
      */
     @Value("${security.jwt.token.expire-length:3600000}")
-    private final long validityInMilliseconds = 3600000L * 24 * 365; // 1h
+    private final long validityInMilliseconds = 3600000L; // 1h
 
     /**
      * The User details service.
@@ -113,6 +119,28 @@ public class JwtTokenProvider {
     }
 
     /**
+     * Create refresh token string.
+     *
+     * @param username the username
+     * @return the string
+     */
+    public String createRefreshToken(final String username) {
+
+        Claims claims = Jwts.claims().setSubject(username).build();
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MINUTE, FIVE_);
+        Date validity = new Date(c.getTimeInMillis() + validityInMilliseconds);
+
+        return Jwts.builder()//
+                .setClaims(claims)//
+                .setIssuedAt(new Date(c.getTimeInMillis()))//
+                .setExpiration(validity)//
+                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .compact();
+    }
+
+    /**
      * Gets authentication.
      *
      * @param token the token
@@ -122,8 +150,8 @@ public class JwtTokenProvider {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         UserEntity user = this.userService.findByEmail(userDetails.getUsername());
         if (user != null) {
-            UserTokenEntity userToken = this.userTokenService.getById(user.getId());
-            if (!userToken.getToken().equals(token)) {
+            UserTokenEntity userTokenEntity = this.userTokenService.getById(user.getId());
+            if (userTokenEntity == null || !userTokenEntity.getAccessToken().equals(token)) {
                 throw new CustomException("Invalid token", HttpStatus.UNAUTHORIZED);
             }
         }

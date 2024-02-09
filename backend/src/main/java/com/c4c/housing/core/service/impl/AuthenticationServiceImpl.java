@@ -2,13 +2,16 @@ package com.c4c.housing.core.service.impl;
 
 import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.core.entity.UserEntity;
+import com.c4c.housing.core.entity.UserTokenEntity;
 import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.core.service.UserTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -72,11 +75,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @param username the username
      * @param password the password
      * @param isOtp    the is otp
-     * @return the string
+     * @return the AuthSuccessInfo
      * @throws Exception the exception
      */
     @Override
-    public String authenticate(final String username, final String password, final boolean isOtp) throws Exception {
+    public UserTokenEntity authenticate(final String username, final String password, final boolean isOtp) throws Exception {
 
         UserEntity userEntity = this.userService.findByEmail(username);
         if (userEntity == null) {
@@ -98,13 +101,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             log.info("Authenticated successfully");
             String token = this.jwtTokenProvider.createToken(userDetails.getUsername(),
                     (Set<GrantedAuthority>) userDetails.getAuthorities());
-            this.userTokenService.update(userEntity.getId(), token);
-            return token;
+            String refreshToken = this.jwtTokenProvider.createRefreshToken(userDetails.getUsername());
+            return this.userTokenService.update(userEntity.getId(), token, refreshToken);
         } else {
             log.info("Authenticated failed");
             throw new BadCredentialsException("INVALID_CREDENTIALS");
         }
 
+    }
+
+    /**
+     * Logout.
+     */
+    @Override
+    public void logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        UserEntity userEntity = this.userService.findByEmail(userDetails.getUsername());
+        if (userEntity == null) {
+            log.info("USER_NOT_FOUND");
+            throw new BadCredentialsException("USER_NOT_FOUND");
+        }
+        this.userTokenService.deleteById(userEntity.getId());
     }
 
 }

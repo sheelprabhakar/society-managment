@@ -1,5 +1,6 @@
 package com.c4c.housing.rest.resource.auth;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,10 +23,12 @@ public class JwtRequest implements Serializable {
     /**
      * The Username.
      */
+    @NotBlank
     private String username;
     /**
      * The Password.
      */
+    @NotBlank
     private String password;
     /**
      * The Is otp.

@@ -39,7 +39,7 @@ public class WebSecurityConfig {
             "/v3/api-docs/**",
             "/actuator/*",
             "/swagger-ui/**",
-            "/api/v1/auth/**",
+            "/api/v1/auth/authenticate",
             "/error"
 
     };
