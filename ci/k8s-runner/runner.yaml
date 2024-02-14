@@ -23,6 +23,6 @@ spec:
         - name: REPO_NAME
           value: "test"
         - name: GITHUB_TOKEN
-          value: "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"
+          value: ""
         - name: ACTIONS_RUNNER_INPUT_URL
           value: "https://github.com/bimbim-in/test"
