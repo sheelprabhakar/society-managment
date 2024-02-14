@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gharunner-deployment
+  labels:
+    app: gharunner
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gharunner
+  template:
+    metadata:
+      labels:
+        app: gharunner
+    spec:
+      containers:
+      - name: gharunner
+        image: sheelprabhakar/gha-runner:latest
+        env:
+        - name: REPO_OWNER
+          value: "bimbim-in"
+        - name: REPO_NAME
+          value: "test"
+        - name: GITHUB_TOKEN
+          value: ""
+        - name: ACTIONS_RUNNER_INPUT_URL
+          value: "https://github.com/bimbim-in/test"

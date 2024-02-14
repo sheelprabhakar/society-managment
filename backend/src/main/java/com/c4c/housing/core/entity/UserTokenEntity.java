@@ -34,16 +34,23 @@ public class UserTokenEntity implements Serializable {
      * The Id.
      */
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID id;
+    private UUID userId;
 
     /**
-     * The Token.
+     * The accesstoken.
      */
-    @Column(name = "token", nullable = false, length = TOKEN_MAX_LENGTH)
+    @Column(name = "access_token", nullable = false, length = TOKEN_MAX_LENGTH)
     @Convert(converter = EntityAttributeEncryptor.class)
-    private String token;
+    private String accessToken;
+
+    /**
+     * The Refresh token.
+     */
+    @Column(name = "refresh_token", nullable = false, length = TOKEN_MAX_LENGTH)
+    @Convert(converter = EntityAttributeEncryptor.class)
+    private String refreshToken;
 
     /**
      * The Updated at.

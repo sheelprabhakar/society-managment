@@ -2,6 +2,7 @@ package com.c4c.housing.adapter;
 
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
+import com.c4c.housing.rest.resource.auth.JwtResponse;
 
 /**
  * The interface Rest adapter v 1.
@@ -30,5 +31,10 @@ public interface RestAdapterV1 {
      * @return the string
      * @throws Exception the exception
      */
-    String authenticate(JwtRequest request) throws Exception;
+    JwtResponse authenticate(JwtRequest request) throws Exception;
+
+    /**
+     * Logout.
+     */
+    void logout();
 }

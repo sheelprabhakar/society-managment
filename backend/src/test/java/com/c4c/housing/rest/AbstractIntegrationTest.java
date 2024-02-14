@@ -2,6 +2,7 @@ package com.c4c.housing.rest;
 
 import com.c4c.housing.HousingSocietyApplication;
 import com.c4c.housing.config.security.JwtTokenProvider;
+import com.c4c.housing.rest.resource.auth.JwtResponse;
 import com.c4c.housing.utils.TestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -97,11 +98,11 @@ public abstract class AbstractIntegrationTest {
                             .accept(MediaType.APPLICATION_JSON))
                     //.andDo(print())
                     .andExpect(status().isOk()).andReturn();
-            Map<String, String> map = new HashMap<>();
-            map = TestUtils
+
+            JwtResponse jwt = TestUtils
                     .convertJsonStringToObject(mvcResult.getResponse()
-                            .getContentAsString(), map.getClass());
-            token = "Bearer " + map.get("token");
+                            .getContentAsString(), JwtResponse.class);
+            token = "Bearer " + jwt.getAccessToken();
         }
         return token;
 

@@ -1,5 +1,7 @@
 package com.c4c.housing.core.service;
 
+import com.c4c.housing.core.entity.UserTokenEntity;
+
 /**
  * The interface Authentication service.
  */
@@ -13,5 +15,10 @@ public interface AuthenticationService {
      * @return the string
      * @throws Exception the exception
      */
-    String authenticate(String username, String password, boolean isOtp) throws Exception;
+    UserTokenEntity authenticate(String username, String password, boolean isOtp) throws Exception;
+
+    /**
+     * Logout.
+     */
+    void logout();
 }
