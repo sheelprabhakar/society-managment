@@ -54,6 +54,14 @@ public class CityEntity {
      */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "state_id", nullable = false)
+    private StateEntity state;
+
+    /**
+     * The Country.
+     */
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_id", nullable = false)
     private CountryEntity country;
 

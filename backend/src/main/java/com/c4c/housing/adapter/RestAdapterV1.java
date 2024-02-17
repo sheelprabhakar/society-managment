@@ -3,6 +3,11 @@ package com.c4c.housing.adapter;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
+import com.c4c.housing.rest.resource.lookup.CityResource;
+import com.c4c.housing.rest.resource.lookup.CountryResource;
+import com.c4c.housing.rest.resource.lookup.StateResource;
+
+import java.util.List;
 
 /**
  * The interface Rest adapter v 1.
@@ -45,4 +50,27 @@ public interface RestAdapterV1 {
      * @return the jwt response
      */
     JwtResponse refreshToken(String refreshToken);
+
+    /**
+     * Countries list.
+     *
+     * @return the list
+     */
+    List<CountryResource> countries();
+
+    /**
+     * States list.
+     *
+     * @param countryId the country id
+     * @return the list
+     */
+    List<StateResource> states(int countryId);
+
+    /**
+     * Cities list.
+     *
+     * @param stateId the state id
+     * @return the list
+     */
+    List<CityResource> cities(int stateId);
 }

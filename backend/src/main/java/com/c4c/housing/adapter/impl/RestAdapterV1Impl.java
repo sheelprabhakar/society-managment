@@ -2,14 +2,24 @@ package com.c4c.housing.adapter.impl;
 
 import com.c4c.housing.adapter.RestAdapterV1;
 import com.c4c.housing.core.entity.UserEntity;
+import com.c4c.housing.core.entity.lookup.CityEntity;
+import com.c4c.housing.core.entity.lookup.CountryEntity;
+import com.c4c.housing.core.entity.lookup.StateEntity;
 import com.c4c.housing.core.service.AuthenticationService;
+import com.c4c.housing.core.service.LookupService;
 import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
+import com.c4c.housing.rest.resource.lookup.CityResource;
+import com.c4c.housing.rest.resource.lookup.CountryResource;
+import com.c4c.housing.rest.resource.lookup.StateResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Rest adapter v 1.
@@ -28,17 +38,32 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     /**
      * Instantiates a new Rest adapter v 1.
      *
-     * @param userService           the user service
+     * @param userService the user service
      * @param authenticationService the authentication service
      */
-
     private final ModelMapper exactNameModelMapper;
+
+    /**
+     * The Lookup service.
+     */
+    private final LookupService lookupService;
+
+    /**
+     * Instantiates a new Rest adapter v 1.
+     *
+     * @param userService           the user service
+     * @param authenticationService the authentication service
+     * @param exactNameModelMapper  the exact name model mapper
+     * @param lookupService         the lookup service
+     */
     @Autowired
     public RestAdapterV1Impl(final UserService userService,
-                             final AuthenticationService authenticationService, ModelMapper exactNameModelMapper) {
+                             final AuthenticationService authenticationService,
+                             final ModelMapper exactNameModelMapper, final LookupService lookupService) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.exactNameModelMapper = exactNameModelMapper;
+        this.lookupService = lookupService;
     }
 
     /**
@@ -99,5 +124,43 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     public JwtResponse refreshToken(final String refreshToken) {
         return this.exactNameModelMapper.map(
                 this.authenticationService.refreshToken(refreshToken), JwtResponse.class);
+    }
+
+    /**
+     * Countries list.
+     *
+     * @return the list
+     */
+    @Override
+    public List<CountryResource> countries() {
+        List<CountryEntity> countryEntities = this.lookupService.countries();
+        return countryEntities.stream().map(countryEntity -> this.exactNameModelMapper
+                .map(countryEntity, CountryResource.class)).collect(Collectors.toList());
+    }
+
+    /**
+     * States list.
+     *
+     * @param countryId the country id
+     * @return the list
+     */
+    @Override
+    public List<StateResource> states(final int countryId) {
+        List<StateEntity> stateEntities = this.lookupService.states(countryId);
+        return stateEntities.stream().map(stateEntity -> this.exactNameModelMapper
+                .map(stateEntity, StateResource.class)).collect(Collectors.toList());
+    }
+
+    /**
+     * Cities list.
+     *
+     * @param stateId the state id
+     * @return the list
+     */
+    @Override
+    public List<CityResource> cities(final int stateId) {
+        List<CityEntity> cityEntities = this.lookupService.cities(stateId);
+        return cityEntities.stream().map(cityEntity -> this.exactNameModelMapper
+                .map(cityEntity, CityResource.class)).collect(Collectors.toList());
     }
 }
