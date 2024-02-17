@@ -37,4 +37,12 @@ public interface RestAdapterV1 {
      * Logout.
      */
     void logout();
+
+    /**
+     * Refresh token jwt response.
+     *
+     * @param refreshToken the token
+     * @return the jwt response
+     */
+    JwtResponse refreshToken(String refreshToken);
 }

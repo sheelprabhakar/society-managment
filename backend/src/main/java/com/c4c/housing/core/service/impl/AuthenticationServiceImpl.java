@@ -4,6 +4,7 @@ import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.entity.UserTokenEntity;
 import com.c4c.housing.core.service.AuthenticationService;
+import com.c4c.housing.core.service.UserExDetailsService;
 import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.core.service.UserTokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     /**
      * The User details service.
      */
-    private final UserDetailsService userDetailsService;
+    private final UserExDetailsService userDetailsService;
 
     /**
      * The User service.
@@ -59,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Autowired
     public AuthenticationServiceImpl(final JwtTokenProvider jwtTokenProvider,
-                                     final UserDetailsService userDetailsService,
+                                     final UserExDetailsService userDetailsService,
                                      final UserService userService, final UserTokenService userTokenService,
                                      final PasswordEncoder passwordEncoder) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -79,7 +79,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @throws Exception the exception
      */
     @Override
-    public UserTokenEntity authenticate(final String username, final String password, final boolean isOtp) throws Exception {
+    public UserTokenEntity authenticate(final String username,
+                                        final String password, final boolean isOtp) throws Exception {
 
         UserEntity userEntity = this.userService.findByEmail(username);
         if (userEntity == null) {
@@ -123,6 +124,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadCredentialsException("USER_NOT_FOUND");
         }
         this.userTokenService.deleteById(userEntity.getId());
+    }
+
+    /**
+     * Refresh token user token entity.
+     *
+     * @param refreshToken the token
+     * @return the user token entity
+     */
+    @Override
+    public UserTokenEntity refreshToken(final String refreshToken) {
+        if (this.jwtTokenProvider.validateToken(refreshToken)) {
+            String username = this.jwtTokenProvider.getUsername(refreshToken);
+            UserEntity userEntity = this.userService.findByEmail(username);
+            UserDetails userDetails = this.userDetailsService
+                    .loadUserByUsername(userEntity);
+            String token = this.jwtTokenProvider.createToken(userDetails.getUsername(),
+                    (Set<GrantedAuthority>) userDetails.getAuthorities());
+
+            String newRefreshToken = this.jwtTokenProvider.createRefreshToken(userDetails.getUsername());
+            return this.userTokenService.update(userEntity.getId(), token, newRefreshToken);
+        }
+        return null;
     }
 
 }

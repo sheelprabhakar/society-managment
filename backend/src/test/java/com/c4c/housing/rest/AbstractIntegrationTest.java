@@ -4,7 +4,9 @@ import com.c4c.housing.HousingSocietyApplication;
 import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
 import com.c4c.housing.utils.TestUtils;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +40,9 @@ public abstract class AbstractIntegrationTest {
      */
     @Autowired
     MockMvc mockMvc;
+
+    @Value("${security.jwt.token.secret-key:secret-key}")
+    String secretKey;
 
     /**
      * The Jwt token provider.
@@ -81,6 +87,10 @@ public abstract class AbstractIntegrationTest {
         registry.add("memcached.cache.provider", ()->String.valueOf("static"));*/
     }
 
+    @PostConstruct
+    void init() {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    }
 
     /**
      * Gets admin token.

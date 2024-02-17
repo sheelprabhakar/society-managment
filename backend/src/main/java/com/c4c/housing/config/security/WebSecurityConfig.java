@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,6 +41,7 @@ public class WebSecurityConfig {
             "/actuator/*",
             "/swagger-ui/**",
             "/api/v1/auth/authenticate",
+            "/api/v1/auth/refreshToken",
             "/error"
 
     };
@@ -63,6 +65,8 @@ public class WebSecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/tenant").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "tenant").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults())
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
@@ -81,11 +85,16 @@ public class WebSecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 
+    /**
+     * Cors configurer web mvc configurer.
+     *
+     * @return the web mvc configurer
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(final CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("*");
             }
         };

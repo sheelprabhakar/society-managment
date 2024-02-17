@@ -26,7 +26,6 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
     /**
      * The constant FIVE_.
      */
-    public static final int FIVE_ = 5;
+    public static final int FIVE = 5;
 
     /**
      * The Secret key.
@@ -129,7 +128,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(username).build();
 
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, FIVE_);
+        c.add(Calendar.MINUTE, FIVE);
         Date validity = new Date(c.getTimeInMillis() + validityInMilliseconds);
 
         return Jwts.builder()//
@@ -147,8 +146,9 @@ public class JwtTokenProvider {
      * @return the authentication
      */
     public Authentication getAuthentication(final String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
-        UserEntity user = this.userService.findByEmail(userDetails.getUsername());
+        UserEntity user = this.userService.findByEmail(getUsername(token));
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(user);
+
         if (user != null) {
             UserTokenEntity userTokenEntity = this.userTokenService.getById(user.getId());
             if (userTokenEntity == null || !userTokenEntity.getAccessToken().equals(token)) {

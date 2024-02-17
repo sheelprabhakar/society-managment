@@ -21,4 +21,12 @@ public interface AuthenticationService {
      * Logout.
      */
     void logout();
+
+    /**
+     * Refresh token user token entity.
+     *
+     * @param refreshToken the token
+     * @return the user token entity
+     */
+    UserTokenEntity refreshToken(String refreshToken);
 }
