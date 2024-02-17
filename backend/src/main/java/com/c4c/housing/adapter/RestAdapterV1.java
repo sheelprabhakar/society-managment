@@ -3,6 +3,7 @@ package com.c4c.housing.adapter;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The interface Rest adapter v 1.
@@ -37,4 +38,12 @@ public interface RestAdapterV1 {
      * Logout.
      */
     void logout();
+
+    /**
+     * Refresh token jwt response.
+     *
+     * @param request the auth token
+     * @return the jwt response
+     */
+    JwtResponse refreshToken(HttpServletRequest request);
 }

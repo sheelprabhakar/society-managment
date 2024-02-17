@@ -1,6 +1,7 @@
 package com.c4c.housing.core.service;
 
 import com.c4c.housing.core.entity.UserTokenEntity;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * The interface Authentication service.
@@ -21,4 +22,12 @@ public interface AuthenticationService {
      * Logout.
      */
     void logout();
+
+    /**
+     * Refresh token user token entity.
+     *
+     * @param request the request
+     * @return the user token entity
+     */
+    UserTokenEntity refreshToken(HttpServletRequest request);
 }

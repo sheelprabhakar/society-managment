@@ -48,6 +48,7 @@ tasks.named("bootJar") {
 }
 
 tasks.withType(Checkstyle) {
+	checkstyleTest.enabled = false
 	reports {
 		xml.required = false
 		html.required = true

@@ -24,7 +24,7 @@ public interface UserTokenService {
      * @param refreshToken
      * @return the user token entity
      */
-    UserTokenEntity update(UUID id, String token, final String refreshToken);
+    UserTokenEntity update(UUID id, String token, String refreshToken);
 
     /**
      * Delete by id.

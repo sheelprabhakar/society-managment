@@ -87,10 +87,12 @@ CREATE TABLE `user_token` (
     ON UPDATE CASCADE);
 
 
+INSERT INTO `role` (`id`, `name`, `is_deleted`, `created_by`, `updated_by`) VALUES ('52a05765-a8e0-4fd7-b95b-3b14b52634f5', 'SUPER_ADMIN', '0', 'SYSTEM', 'SYSTEM');
 INSERT INTO `role` (`id`, `name`, `is_deleted`, `created_by`, `updated_by`) VALUES ('02ec9264-bdf8-4c56-971c-d4ab699e24e6', 'ADMIN', '0', 'SYSTEM', 'SYSTEM');
 INSERT INTO `role` (`id`, `name`, `is_deleted`, `created_by`, `updated_by`) VALUES ('e78fd037-8b92-47a0-a7f1-d2e16cf31738', 'USER', '0', 'SYSTEM', 'SYSTEM');
 
 INSERT INTO `user` (`id`, `first_name`, `middle_name`, `last_name`, `user_name`, `mobile`, `email`, `password_hash`, `is_locked`, `is_deleted`, `created_by`, `updated_by`) VALUES ('bc5a1ff0-cab9-44f6-98f6-fe988e1c0afc', 'admin', 'a', 'User', 'admin', '9899098990', 'sheel.prabhakar@gmail.com', '$2a$12$NL54bmIzc2qe9BgHFMCVleKQ/mUYvq7Bv7jIUODO3.jCshcUs0l0q', '0', '0', 'SYSTEM', 'SYSTEM');
 
 INSERT INTO `user_role` (`role_id`, `user_id`, `is_deleted`, `created_by`, `updated_by`) VALUES ('02ec9264-bdf8-4c56-971c-d4ab699e24e6', 'bc5a1ff0-cab9-44f6-98f6-fe988e1c0afc', '0', 'SYSTEM', 'SYSTEM');
+INSERT INTO `user_role` (`role_id`, `user_id`, `is_deleted`, `created_by`, `updated_by`) VALUES ('52a05765-a8e0-4fd7-b95b-3b14b52634f5', 'bc5a1ff0-cab9-44f6-98f6-fe988e1c0afc', '0', 'SYSTEM', 'SYSTEM');
 

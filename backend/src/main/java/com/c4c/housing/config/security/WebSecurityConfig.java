@@ -81,11 +81,16 @@ public class WebSecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 
+    /**
+     * Cors configurer web mvc configurer.
+     *
+     * @return the web mvc configurer
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(final CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("*");
             }
         };

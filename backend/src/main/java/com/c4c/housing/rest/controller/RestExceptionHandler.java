@@ -8,13 +8,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
+/**
+ * The type Rest exception handler.
+ */
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
+    /**
+     * Handle bad credential exception response entity.
+     *
+     * @param ex      the ex
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleBadCredentialException(
-            BadCredentialsException ex, WebRequest request) {
+           final BadCredentialsException ex, final WebRequest request) {
 
         return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
     }

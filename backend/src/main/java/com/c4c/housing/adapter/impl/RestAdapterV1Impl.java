@@ -6,6 +6,7 @@ import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -66,7 +67,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public JwtResponse authenticate(final JwtRequest request) throws Exception {
-        return TokenCoverter.AuthSuccessInfo2JwtResponse(
+        return TokenConverter.authSuccessInfoToJwtResponse(
                 this.authenticationService.authenticate(request.getUsername(),
                 request.getPassword(), request.isOtp()));
     }
@@ -77,5 +78,17 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     @Override
     public void logout() {
         this.authenticationService.logout();
+    }
+
+    /**
+     * Refresh token jwt response.
+     *
+     * @param request the auth token
+     * @return the jwt response
+     */
+    @Override
+    public JwtResponse refreshToken(final HttpServletRequest request) {
+        return TokenConverter.authSuccessInfoToJwtResponse(
+                this.authenticationService.refreshToken(request));
     }
 }
