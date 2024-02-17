@@ -1,11 +1,13 @@
 package com.c4c.housing.adapter.impl;
 
 import com.c4c.housing.adapter.RestAdapterV1;
+import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +31,14 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      * @param userService           the user service
      * @param authenticationService the authentication service
      */
+
+    private final ModelMapper exactNameModelMapper;
     @Autowired
-    public RestAdapterV1Impl(final UserService userService, final AuthenticationService authenticationService) {
+    public RestAdapterV1Impl(final UserService userService,
+                             final AuthenticationService authenticationService, ModelMapper exactNameModelMapper) {
         this.userService = userService;
         this.authenticationService = authenticationService;
+        this.exactNameModelMapper = exactNameModelMapper;
     }
 
     /**
@@ -43,7 +49,9 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public UserResource save(final UserResource userResource) {
-        return UserConverter.fromUserEntity(this.userService.save(UserConverter.fromUserResource(userResource)));
+        return this.exactNameModelMapper.map(this.userService.save(
+                this.exactNameModelMapper.map(userResource, UserEntity.class)),
+                UserResource.class);
     }
 
     /**
@@ -54,7 +62,9 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public UserResource update(final UserResource userResource) {
-        return UserConverter.fromUserEntity(this.userService.update(UserConverter.fromUserResource(userResource)));
+        return this.exactNameModelMapper.map(this.userService.update(
+                this.exactNameModelMapper.map(userResource, UserEntity.class)),
+                UserResource.class);
     }
 
     /**
@@ -66,9 +76,9 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public JwtResponse authenticate(final JwtRequest request) throws Exception {
-        return TokenConverter.authSuccessInfoToJwtResponse(
+        return this.exactNameModelMapper.map(
                 this.authenticationService.authenticate(request.getUsername(),
-                request.getPassword(), request.isOtp()));
+                request.getPassword(), request.isOtp()), JwtResponse.class);
     }
 
     /**
@@ -87,7 +97,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public JwtResponse refreshToken(final String refreshToken) {
-        return TokenConverter.authSuccessInfoToJwtResponse(
-                this.authenticationService.refreshToken(refreshToken));
+        return this.exactNameModelMapper.map(
+                this.authenticationService.refreshToken(refreshToken), JwtResponse.class);
     }
 }

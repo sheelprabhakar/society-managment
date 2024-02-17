@@ -24,6 +24,8 @@ dependencies {
 	implementation 'io.sixhours:memcached-spring-boot-starter:2.5.0'
 	implementation 'org.hibernate:hibernate-validator:8.0.1.Final'
 
+	implementation 'org.modelmapper:modelmapper:3.2.0'
+
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
 
@@ -39,7 +41,9 @@ dependencies {
 	testImplementation 'org.testcontainers:testcontainers:1.18.3'
 	testImplementation 'org.testcontainers:mysql:1.18.3'
 }
-
+checkstyle {
+	toolVersion '7.1.1'
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
