@@ -40,6 +40,7 @@ public class WebSecurityConfig {
             "/actuator/*",
             "/swagger-ui/**",
             "/api/v1/auth/authenticate",
+            "/api/v1/auth/refreshToken",
             "/error"
 
     };

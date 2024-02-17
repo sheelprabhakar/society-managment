@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -122,5 +123,48 @@ public class AuthenticationControllerTest extends AbstractIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 //.andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    public void test_refresh_token_ok() throws Exception {
+        assertTrue(this.getAdminToken().startsWith("Bearer"));
+
+        String response= this.mockMvc.perform(MockMvcRequestBuilders
+                        .post(BASE_URL + "/authenticate")
+                        .content("{\"username\":\"sheel.prabhakar@gmail.com\"," +
+                                " \"password\":\"admin123\", \"isOtp\":false}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        JwtResponse jwtResponse = TestUtils.convertJsonStringToObject(response, JwtResponse.class);
+        assertNotNull(jwtResponse.getAccessToken());
+        Claims payload = Jwts.parser().setSigningKey(secretKey).build()
+                .parseClaimsJws(jwtResponse.getAccessToken()).getPayload();
+        assertEquals(payload.getSubject(), "sheel.prabhakar@gmail.com");
+        List<Map<String, String>> authorities = (List<Map<String, String>>) payload.get("authorities");
+        assertEquals(authorities.size(), 2);
+        assertNotNull(jwtResponse.getRefreshToken());
+
+
+        response= this.mockMvc.perform(MockMvcRequestBuilders
+                        .post(BASE_URL + "/refreshToken")
+                        .param("refreshToken", jwtResponse.getRefreshToken())
+                        .accept(MediaType.APPLICATION_JSON))
+                //.andDo(print())
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        jwtResponse = TestUtils.convertJsonStringToObject(response, JwtResponse.class);
+        assertNotNull(jwtResponse.getAccessToken());
+        payload = Jwts.parser().setSigningKey(secretKey).build()
+                .parseClaimsJws(jwtResponse.getAccessToken()).getPayload();
+        assertEquals(payload.getSubject(), "sheel.prabhakar@gmail.com");
+        authorities = (List<Map<String, String>>) payload.get("authorities");
+        assertEquals(authorities.size(), 2);
+        assertNotNull(jwtResponse.getRefreshToken());
+
+        // ToDo #eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaGVlbC5wcmFiaGFrYXJAZ21haWwuY29tIiwiaWF0IjoxNzA4MTQ4ODQwLCJleHAiOjE3MDgxNTI0NDB9.kQV0AV-gR-KwsELoQc2KhAGqf59NaLRkUsKhg87-vXI
     }
 }

@@ -6,7 +6,6 @@ import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -83,12 +82,12 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     /**
      * Refresh token jwt response.
      *
-     * @param request the auth token
+     * @param refreshToken the token
      * @return the jwt response
      */
     @Override
-    public JwtResponse refreshToken(final HttpServletRequest request) {
+    public JwtResponse refreshToken(final String refreshToken) {
         return TokenConverter.authSuccessInfoToJwtResponse(
-                this.authenticationService.refreshToken(request));
+                this.authenticationService.refreshToken(refreshToken));
     }
 }

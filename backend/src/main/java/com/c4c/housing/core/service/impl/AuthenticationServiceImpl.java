@@ -7,7 +7,6 @@ import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.UserExDetailsService;
 import com.c4c.housing.core.service.UserService;
 import com.c4c.housing.core.service.UserTokenService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -130,22 +129,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     /**
      * Refresh token user token entity.
      *
-     * @param request the auth token
+     * @param refreshToken the token
      * @return the user token entity
      */
     @Override
-    public UserTokenEntity refreshToken(final HttpServletRequest request) {
-        String token = this.jwtTokenProvider.resolveToken(request);
-        if (this.jwtTokenProvider.validateToken(token)) {
-            String username = this.jwtTokenProvider.getUsername(token);
+    public UserTokenEntity refreshToken(final String refreshToken) {
+        if (this.jwtTokenProvider.validateToken(refreshToken)) {
+            String username = this.jwtTokenProvider.getUsername(refreshToken);
             UserEntity userEntity = this.userService.findByEmail(username);
             UserDetails userDetails = this.userDetailsService
                     .loadUserByUsername(userEntity);
-            token = this.jwtTokenProvider.createToken(userDetails.getUsername(),
+            String token = this.jwtTokenProvider.createToken(userDetails.getUsername(),
                     (Set<GrantedAuthority>) userDetails.getAuthorities());
 
-            String refreshToken = this.jwtTokenProvider.createRefreshToken(userDetails.getUsername());
-            return this.userTokenService.update(userEntity.getId(), token, refreshToken);
+            String newRefreshToken = this.jwtTokenProvider.createRefreshToken(userDetails.getUsername());
+            return this.userTokenService.update(userEntity.getId(), token, newRefreshToken);
         }
         return null;
     }

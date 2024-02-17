@@ -3,7 +3,6 @@ package com.c4c.housing.rest.controller;
 import com.c4c.housing.adapter.RestAdapterV1;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -69,13 +69,13 @@ public class AuthenticationController {
     /**
      * Refresh token response entity.
      *
-     * @param request the request
+     * @param refreshToken the token
      * @return the response entity
      * @throws Exception the exception
      */
     @PostMapping("/refreshToken")
-    public ResponseEntity<JwtResponse> refreshToken(final HttpServletRequest request) throws Exception {
-        JwtResponse jwtResponse = this.restAdapterV1.refreshToken(request);
+    public ResponseEntity<JwtResponse> refreshToken(final @RequestParam String refreshToken) throws Exception {
+        JwtResponse jwtResponse = this.restAdapterV1.refreshToken(refreshToken);
         return ResponseEntity.ok(jwtResponse);
     }
 
