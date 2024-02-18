@@ -50,6 +50,7 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public TenantEntity create(final TenantEntity tenantEntity) {
+        tenantEntity.setActive(true);
         TenantEntity entity = this.tenantRepository.save(tenantEntity);
         // If User not register then automatically register admin user
         if (Objects.isNull(this.userService.findByEmail(tenantEntity.getEmail()))) {

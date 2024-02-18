@@ -145,6 +145,6 @@ public class UserEntity extends CommonEntityAttributes implements Serializable {
 
     @NotNull
     @Column(name = "is_deleted", nullable = false)
-    private Byte isDeleted;
+    private boolean isDeleted;
 
 }

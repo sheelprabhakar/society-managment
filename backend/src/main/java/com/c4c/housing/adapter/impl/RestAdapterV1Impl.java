@@ -183,8 +183,15 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public TenantResource createTenant(final TenantResource tenantResource) {
-        return this.exactNameModelMapper.map(this.tenantService.create(
-                        this.exactNameModelMapper.map(tenantResource, TenantEntity.class)),
+        TenantEntity tenantEntity = this.exactNameModelMapper.map(tenantResource, TenantEntity.class);
+        CityEntity cityEntity = this.lookupService.getCityById(tenantResource.getCityId());
+        tenantEntity.setCity(cityEntity);
+
+        tenantEntity = this.tenantService.create(tenantEntity);
+
+        TenantResource resource = this.exactNameModelMapper.map(this.tenantService.create(tenantEntity),
                 TenantResource.class);
+        resource.setCityId(tenantEntity.getCity().getId());
+        return resource;
     }
 }

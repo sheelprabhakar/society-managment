@@ -58,12 +58,14 @@ public class TenantEntity extends CommonEntityAttributes implements Serializable
      * The Name.
      */
     @Column(name = "name", length = L255, nullable = false)
+    @NotNull
     private String name;
 
     /**
      * The Email.
      */
     @Column(name = "email", length = L255, nullable = false)
+    @NotNull
     private String email;
 
     /**
@@ -83,12 +85,6 @@ public class TenantEntity extends CommonEntityAttributes implements Serializable
      */
     @Column(name = "phone", length = L15, nullable = true)
     private String phone;
-
-    /**
-     * The Is active.
-     */
-    @Column(name = "is_active", nullable = true)
-    private Boolean isActive;
 
     /**
      * The Short name.

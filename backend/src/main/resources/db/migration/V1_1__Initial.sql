@@ -89,6 +89,7 @@ CREATE TABLE `tenant` (
   `mobile` VARCHAR(15) NOT NULL,
   `address` VARCHAR(255) NOT NULL,
   `area` VARCHAR(255) NULL,
+  `pin` VARCHAR(7) NULL,
   `landmark` VARCHAR(45) NULL,
   `city_id` MEDIUMINT UNSIGNED NOT NULL,
   `picture_url` VARCHAR(2048) NULL,

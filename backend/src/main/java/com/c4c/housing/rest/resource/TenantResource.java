@@ -2,6 +2,8 @@ package com.c4c.housing.rest.resource;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +16,8 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TenantResource extends CommonResourceAttributes implements Serializable {
     /**
      * The Id.
@@ -22,14 +26,20 @@ public class TenantResource extends CommonResourceAttributes implements Serializ
     /**
      * The Name.
      */
+    @NotNull
+    @Size(max = 45)
     private String name;
     /**
      * The Email.
      */
+    @NotNull
+    @Size(max = 255)
     private String email;
     /**
      * The Address.
      */
+    @NotNull
+    @Size(max = 255)
     private String address;
     /**
      * The Pin.
@@ -39,10 +49,7 @@ public class TenantResource extends CommonResourceAttributes implements Serializ
      * The Phone.
      */
     private String phone;
-    /**
-     * The Is active.
-     */
-    private Boolean isActive;
+
     /**
      * The Short name.
      */
@@ -75,7 +82,6 @@ public class TenantResource extends CommonResourceAttributes implements Serializ
     /**
      * The Active.
      */
-    @NotNull
     private boolean active;
 
     /**
@@ -83,4 +89,10 @@ public class TenantResource extends CommonResourceAttributes implements Serializ
      */
     @NotNull
     private String mobile;
+
+    /**
+     * The City id.
+     */
+    @NotNull
+    private int cityId;
 }

@@ -1,6 +1,10 @@
 package com.c4c.housing.rest.resource;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +16,8 @@ import java.util.UUID;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserResource extends CommonResourceAttributes {
     /**
      * The Id.
@@ -73,5 +79,12 @@ public class UserResource extends CommonResourceAttributes {
      * The Is deleted.
      */
     private boolean isDeleted;
+
+    /**
+     * The Username.
+     */
+    @NotNull
+    @Size(max = 45)
+    private String userName;
 
 }

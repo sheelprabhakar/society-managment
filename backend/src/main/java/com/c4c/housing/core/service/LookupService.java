@@ -32,5 +32,13 @@ public interface LookupService {
      * @return the list
      */
     List<CityEntity> cities(int stateId);
+
+    /**
+     * Gets city by id.
+     *
+     * @param cityId the city id
+     * @return the city by id
+     */
+    CityEntity getCityById(int cityId);
 }
 
