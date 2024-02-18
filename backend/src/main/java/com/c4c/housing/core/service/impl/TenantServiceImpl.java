@@ -51,13 +51,35 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public TenantEntity create(final TenantEntity tenantEntity) {
         tenantEntity.setActive(true);
+        return this.getTenantEntity(tenantEntity);
+    }
+
+    /**
+     * Gets tenant entity.
+     *
+     * @param tenantEntity the tenant entity
+     * @return the tenant entity
+     */
+    private TenantEntity getTenantEntity(TenantEntity tenantEntity) {
         TenantEntity entity = this.tenantRepository.save(tenantEntity);
         // If User not register then automatically register admin user
         if (Objects.isNull(this.userService.findByEmail(tenantEntity.getEmail()))) {
             UserEntity userEntity = getNewUserEntity(tenantEntity);
             this.userService.save(userEntity);
+            // Todo: implement mapping of user to tenant
         }
         return entity;
+    }
+
+    /**
+     * Update tenant entity.
+     *
+     * @param tenantEntity the tenant entity
+     * @return the tenant entity
+     */
+    @Override
+    public TenantEntity update(TenantEntity tenantEntity) {
+        return this.getTenantEntity(tenantEntity);
     }
 
     /**

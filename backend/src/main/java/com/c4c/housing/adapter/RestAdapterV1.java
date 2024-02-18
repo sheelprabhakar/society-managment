@@ -82,4 +82,20 @@ public interface RestAdapterV1 {
      * @return the tenant resource
      */
     TenantResource createTenant(TenantResource tenantResource);
+
+    /**
+     * Update tenant tenant resource.
+     *
+     * @param tenantResource the tenant resource
+     * @return the tenant resource
+     */
+    TenantResource updateTenant(TenantResource tenantResource);
+
+    /**
+     * Read tenant tenant resource.
+     *
+     * @param tenantId the tenant id
+     * @return the tenant resource
+     */
+    TenantResource readTenant(String tenantId);
 }

@@ -44,7 +44,7 @@ public class LookupController extends BaseController{
      */
     @GetMapping("/country")
     public ResponseEntity<List<CountryResource>> countries() throws Exception {
-        List<CountryResource> countryResources = this.restAdapterV1.countries();
+        List<CountryResource> countryResources = this.getRestAdapterV1().countries();
         return ResponseEntity.ok(countryResources);
     }
 
@@ -57,13 +57,13 @@ public class LookupController extends BaseController{
      */
     @GetMapping("/country/{countryId}/state")
     public ResponseEntity<List<StateResource>> states(@PathVariable("countryId") int countryId) throws Exception {
-        List<StateResource> stateResources = this.restAdapterV1.states(countryId);
+        List<StateResource> stateResources = this.getRestAdapterV1().states(countryId);
         return ResponseEntity.ok(stateResources);
     }
 
     @GetMapping("/state/{stateId}/city")
     public ResponseEntity<List<CityResource>> cities(@PathVariable("stateId") int stateId) throws Exception {
-        List<CityResource> cityResources = this.restAdapterV1.cities(stateId);
+        List<CityResource> cityResources = this.getRestAdapterV1().cities(stateId);
         return ResponseEntity.ok(cityResources);
     }
 }

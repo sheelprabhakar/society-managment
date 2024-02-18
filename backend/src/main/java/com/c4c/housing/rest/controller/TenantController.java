@@ -5,8 +5,12 @@ import com.c4c.housing.rest.resource.TenantResource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,10 +39,46 @@ public class TenantController extends BaseController {
         super(restAdapterV1);
     }
 
+    /**
+     * Create response entity.
+     *
+     * @param tenantResource the tenant resource
+     * @return the response entity
+     */
     @PostMapping
-    public ResponseEntity<TenantResource> create(@Valid @RequestBody TenantResource tenantResource){
-        TenantResource resource = this.restAdapterV1.createTenant(tenantResource);
-        return ResponseEntity.created(URI.create(BASE_URL + "/"+ resource.getId()))
+    public ResponseEntity<TenantResource> create(@Valid @RequestBody final TenantResource tenantResource) {
+        TenantResource resource = this.getRestAdapterV1().createTenant(tenantResource);
+        return ResponseEntity.created(URI.create(BASE_URL + "/" + resource.getId()))
                 .body(resource);
+    }
+
+    /**
+     * Update response entity.
+     *
+     * @param tenantResource the tenant resource
+     * @return the response entity
+     */
+    @PutMapping
+    public ResponseEntity<TenantResource> update(@Valid @RequestBody final TenantResource tenantResource) {
+        TenantResource resource = this.getRestAdapterV1().updateTenant(tenantResource);
+        return ResponseEntity.ok()
+                .body(resource);
+    }
+
+    /**
+     * Read response entity.
+     *
+     * @param tenantId the tenant id
+     * @return the response entity
+     */
+    @GetMapping("/{tenantId}")
+    public ResponseEntity<?> read(@PathVariable("tenantId") final String tenantId) {
+        if(this.isTenantAdmin() || tenantId.equals(this.getTenantId())) {
+            TenantResource resource = this.getRestAdapterV1().readTenant(tenantId);
+            return ResponseEntity.ok()
+                    .body(resource);
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not access this resource.");
+        }
     }
 }

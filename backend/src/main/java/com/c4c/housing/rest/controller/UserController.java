@@ -20,11 +20,7 @@ import java.net.URI;
 @Slf4j
 @RestController()
 @RequestMapping(UserController.BASE_URL)
-public class UserController {
-    /**
-     * The Rest adapter v 1.
-     */
-    private final RestAdapterV1 restAdapterV1;
+public class UserController extends BaseController {
     /**
      * The Base url.
      */
@@ -37,7 +33,7 @@ public class UserController {
      */
     @Autowired
     public UserController(final RestAdapterV1 restAdapterV1) {
-        this.restAdapterV1 = restAdapterV1;
+        super(restAdapterV1);
     }
 
     /**
@@ -48,7 +44,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<UserResource> add(final @RequestBody @Validated UserResource userResource) {
-        UserResource resource = this.restAdapterV1.save(userResource);
+        UserResource resource = this.getRestAdapterV1().save(userResource);
         return ResponseEntity.created(URI.create(BASE_URL +"/"+ resource.getId()))
                 .body(resource);
     }
@@ -61,7 +57,7 @@ public class UserController {
      */
     @PutMapping
     public ResponseEntity<UserResource> update(final @RequestBody UserResource userResource) {
-        UserResource resource = this.restAdapterV1.update(userResource);
+        UserResource resource = this.getRestAdapterV1().update(userResource);
         return ResponseEntity.ok(resource);
     }
 

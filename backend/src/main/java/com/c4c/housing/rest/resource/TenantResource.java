@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -94,5 +95,6 @@ public class TenantResource extends CommonResourceAttributes implements Serializ
      * The City id.
      */
     @NotNull
+    @Range(min = Integer.MIN_VALUE, max = Integer.MAX_VALUE)
     private int cityId;
 }

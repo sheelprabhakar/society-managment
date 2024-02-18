@@ -183,9 +183,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public TenantResource createTenant(final TenantResource tenantResource) {
-        TenantEntity tenantEntity = this.exactNameModelMapper.map(tenantResource, TenantEntity.class);
-        CityEntity cityEntity = this.lookupService.getCityById(tenantResource.getCityId());
-        tenantEntity.setCity(cityEntity);
+        TenantEntity tenantEntity = this.getTenantEntity(tenantResource);
 
         tenantEntity = this.tenantService.create(tenantEntity);
 
@@ -193,5 +191,45 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
                 TenantResource.class);
         resource.setCityId(tenantEntity.getCity().getId());
         return resource;
+    }
+
+    /**
+     * Gets tenant entity.
+     *
+     * @param tenantResource the tenant resource
+     * @return the tenant entity
+     */
+    private TenantEntity getTenantEntity(TenantResource tenantResource) {
+        TenantEntity tenantEntity = this.exactNameModelMapper.map(tenantResource, TenantEntity.class);
+        CityEntity cityEntity = this.lookupService.getCityById(tenantResource.getCityId());
+        tenantEntity.setCity(cityEntity);
+        return tenantEntity;
+    }
+
+    /**
+     * Update tenant tenant resource.
+     *
+     * @param tenantResource the tenant resource
+     * @return the tenant resource
+     */
+    @Override
+    public TenantResource updateTenant(final TenantResource tenantResource) {
+        TenantEntity tenantEntity = this.getTenantEntity(tenantResource);
+        tenantEntity = this.tenantService.update(tenantEntity);
+        TenantResource resource = this.exactNameModelMapper.map(this.tenantService.create(tenantEntity),
+                TenantResource.class);
+        resource.setCityId(tenantEntity.getCity().getId());
+        return resource;
+    }
+
+    /**
+     * Read tenant tenant resource.
+     *
+     * @param tenantId the tenant id
+     * @return the tenant resource
+     */
+    @Override
+    public TenantResource readTenant(String tenantId) {
+        return null;
     }
 }

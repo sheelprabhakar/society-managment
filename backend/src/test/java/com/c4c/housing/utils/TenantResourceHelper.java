@@ -18,7 +18,7 @@ public final class TenantResourceHelper {
                 .shortName("shotrn"+c)
                 .email(c+EMAIL)
                 .phone(c+MOBILE)
-                .mobile(MOBILE)
+                .mobile(c+MOBILE)
                 .cityId(12)
                 .address("address"+c)
                 .build();
