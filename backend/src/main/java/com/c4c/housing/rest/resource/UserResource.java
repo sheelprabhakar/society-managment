@@ -69,4 +69,9 @@ public class UserResource extends CommonResourceAttributes {
      */
     private boolean isLocked;
 
+    /**
+     * The Is deleted.
+     */
+    private boolean isDeleted;
+
 }

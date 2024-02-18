@@ -3,10 +3,12 @@ package com.c4c.housing.core.service.impl;
 import com.c4c.housing.core.entity.UserTokenEntity;
 import com.c4c.housing.core.repository.UserTokenRepository;
 import com.c4c.housing.core.service.UserTokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -15,6 +17,8 @@ import java.util.UUID;
  * The type User token service.
  */
 @Service
+@Slf4j
+@Transactional
 public class UserTokenServiceImpl implements UserTokenService {
     /**
      * The User token repository.

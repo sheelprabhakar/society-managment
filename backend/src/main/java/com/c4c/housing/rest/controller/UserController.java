@@ -49,7 +49,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResource> add(final @RequestBody @Validated UserResource userResource) {
         UserResource resource = this.restAdapterV1.save(userResource);
-        return ResponseEntity.created(URI.create(BASE_URL + resource.getId()))
+        return ResponseEntity.created(URI.create(BASE_URL +"/"+ resource.getId()))
                 .body(resource);
     }
 

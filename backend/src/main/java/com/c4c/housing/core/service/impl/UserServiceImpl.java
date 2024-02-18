@@ -1,6 +1,8 @@
 package com.c4c.housing.core.service.impl;
 
+import com.c4c.housing.core.entity.RoleEntity;
 import com.c4c.housing.core.entity.UserEntity;
+import com.c4c.housing.core.entity.UserRoleEntity;
 import com.c4c.housing.core.repository.UserRepository;
 import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -29,6 +33,7 @@ public class UserServiceImpl implements UserService {
      * The User repository.
      */
     private final UserRepository userRepository;
+
     /**
      * The Password encoder.
      */
@@ -56,6 +61,10 @@ public class UserServiceImpl implements UserService {
     public UserEntity save(final UserEntity userEntity) {
         if (StringUtils.hasLength(userEntity.getPasswordHash())) {
             userEntity.setPasswordHash(this.passwordEncoder.encode(userEntity.getPasswordHash()));
+        }
+        if(Objects.isNull( userEntity.getRoles()) || userEntity.getRoles().size() == 0){
+            // Add default User Role
+            // To-do
         }
         return this.userRepository.save(userEntity);
     }

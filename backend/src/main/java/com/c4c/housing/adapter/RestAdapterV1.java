@@ -1,5 +1,6 @@
 package com.c4c.housing.adapter;
 
+import com.c4c.housing.rest.resource.TenantResource;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
@@ -73,4 +74,12 @@ public interface RestAdapterV1 {
      * @return the list
      */
     List<CityResource> cities(int stateId);
+
+    /**
+     * Create tenant tenant resource.
+     *
+     * @param tenantResource the tenant resource
+     * @return the tenant resource
+     */
+    TenantResource createTenant(TenantResource tenantResource);
 }

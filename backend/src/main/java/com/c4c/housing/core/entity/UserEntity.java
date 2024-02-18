@@ -10,6 +10,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +31,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity extends CommonEntityAttributes implements Serializable {
 
     /**
@@ -137,5 +142,9 @@ public class UserEntity extends CommonEntityAttributes implements Serializable {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private List<UserRoleEntity> roles;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private Byte isDeleted;
 
 }

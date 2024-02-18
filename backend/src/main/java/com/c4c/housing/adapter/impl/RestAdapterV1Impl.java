@@ -1,13 +1,16 @@
 package com.c4c.housing.adapter.impl;
 
 import com.c4c.housing.adapter.RestAdapterV1;
+import com.c4c.housing.core.entity.TenantEntity;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.entity.lookup.CityEntity;
 import com.c4c.housing.core.entity.lookup.CountryEntity;
 import com.c4c.housing.core.entity.lookup.StateEntity;
 import com.c4c.housing.core.service.AuthenticationService;
 import com.c4c.housing.core.service.LookupService;
+import com.c4c.housing.core.service.TenantService;
 import com.c4c.housing.core.service.UserService;
+import com.c4c.housing.rest.resource.TenantResource;
 import com.c4c.housing.rest.resource.UserResource;
 import com.c4c.housing.rest.resource.auth.JwtRequest;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
@@ -49,21 +52,29 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     private final LookupService lookupService;
 
     /**
+     * The Tenant service.
+     */
+    private final TenantService tenantService;
+
+    /**
      * Instantiates a new Rest adapter v 1.
      *
      * @param userService           the user service
      * @param authenticationService the authentication service
      * @param exactNameModelMapper  the exact name model mapper
      * @param lookupService         the lookup service
+     * @param tenantService         the tenant service
      */
     @Autowired
     public RestAdapterV1Impl(final UserService userService,
                              final AuthenticationService authenticationService,
-                             final ModelMapper exactNameModelMapper, final LookupService lookupService) {
+                             final ModelMapper exactNameModelMapper, final LookupService lookupService,
+                             final TenantService tenantService) {
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.exactNameModelMapper = exactNameModelMapper;
         this.lookupService = lookupService;
+        this.tenantService = tenantService;
     }
 
     /**
@@ -162,5 +173,18 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
         List<CityEntity> cityEntities = this.lookupService.cities(stateId);
         return cityEntities.stream().map(cityEntity -> this.exactNameModelMapper
                 .map(cityEntity, CityResource.class)).collect(Collectors.toList());
+    }
+
+    /**
+     * Create tenant tenant resource.
+     *
+     * @param tenantResource the tenant resource
+     * @return the tenant resource
+     */
+    @Override
+    public TenantResource createTenant(final TenantResource tenantResource) {
+        return this.exactNameModelMapper.map(this.tenantService.create(
+                        this.exactNameModelMapper.map(tenantResource, TenantEntity.class)),
+                TenantResource.class);
     }
 }

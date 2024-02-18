@@ -20,15 +20,11 @@ import java.util.List;
 @Slf4j
 @RestController()
 @RequestMapping(LookupController.BASE_URL)
-public class LookupController {
+public class LookupController extends BaseController{
     /**
      * The Base url.
      */
     static final String BASE_URL = "/api/v1/lookup";
-    /**
-     * The Rest adapter v 1.
-     */
-    private final RestAdapterV1 restAdapterV1;
 
     /**
      * Instantiates a new Lookup controller.
@@ -37,7 +33,7 @@ public class LookupController {
      */
     @Autowired
     public LookupController(final RestAdapterV1 restAdapterV1) {
-        this.restAdapterV1 = restAdapterV1;
+        super(restAdapterV1);
     }
 
     /**
