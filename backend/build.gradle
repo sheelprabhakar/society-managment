@@ -25,6 +25,10 @@ dependencies {
 
 	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
 	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+	implementation 'ch.qos.logback:logback-access:1.4.14'
+
 
 	implementation 'io.sixhours:memcached-spring-boot-starter:2.5.0'
 	implementation 'org.hibernate:hibernate-validator:8.0.1.Final'

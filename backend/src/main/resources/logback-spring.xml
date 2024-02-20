@@ -17,10 +17,20 @@
         </encoder>
     </appender>
 
+    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:50000</destination>
+        <layout class="net.Logstash.logback.layout.LogstashLayout"/>
+        <!-- encoder is required -->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+        <writeBufferSize>0</writeBufferSize>
+    </appender>
+
     <springProfile name="local">
         <root level="DEBUG">
-            <appender-ref ref="CONSOLE" />
+            <!--appender-ref ref="CONSOLE" /-->
             <!--appender-ref ref="FILE" /-->
+            <appender-ref ref="stash" />
         </root>
     </springProfile>
 
