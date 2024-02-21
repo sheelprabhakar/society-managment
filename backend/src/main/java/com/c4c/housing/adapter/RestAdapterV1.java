@@ -9,6 +9,7 @@ import com.c4c.housing.rest.resource.lookup.CountryResource;
 import com.c4c.housing.rest.resource.lookup.StateResource;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The interface Rest adapter v 1.
@@ -97,5 +98,12 @@ public interface RestAdapterV1 {
      * @param tenantId the tenant id
      * @return the tenant resource
      */
-    TenantResource readTenant(String tenantId);
+    TenantResource readTenant(UUID tenantId);
+
+    /**
+     * Read tenants list.
+     *
+     * @return the list
+     */
+    List<TenantResource> readTenants();
 }

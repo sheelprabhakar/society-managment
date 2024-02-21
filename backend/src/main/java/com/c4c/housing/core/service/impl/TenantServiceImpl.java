@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The type Tenant service.
@@ -60,7 +62,7 @@ public class TenantServiceImpl implements TenantService {
      * @param tenantEntity the tenant entity
      * @return the tenant entity
      */
-    private TenantEntity getTenantEntity(TenantEntity tenantEntity) {
+    private TenantEntity getTenantEntity(final TenantEntity tenantEntity) {
         TenantEntity entity = this.tenantRepository.save(tenantEntity);
         // If User not register then automatically register admin user
         if (Objects.isNull(this.userService.findByEmail(tenantEntity.getEmail()))) {
@@ -78,8 +80,24 @@ public class TenantServiceImpl implements TenantService {
      * @return the tenant entity
      */
     @Override
-    public TenantEntity update(TenantEntity tenantEntity) {
+    public TenantEntity update(final TenantEntity tenantEntity) {
         return this.getTenantEntity(tenantEntity);
+    }
+
+    /**
+     * Read tenant entity.
+     *
+     * @param tenantId the tenant id
+     * @return the tenant entity
+     */
+    @Override
+    public TenantEntity read(final UUID tenantId) {
+        return this.tenantRepository.findById(tenantId).get();
+    }
+
+    @Override
+    public List<TenantEntity> readAll() {
+        return this.tenantRepository.findAll();
     }
 
     /**

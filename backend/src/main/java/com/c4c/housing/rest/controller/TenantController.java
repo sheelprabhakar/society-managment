@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The type Tenant controller.
@@ -72,13 +75,31 @@ public class TenantController extends BaseController {
      * @return the response entity
      */
     @GetMapping("/{tenantId}")
-    public ResponseEntity<?> read(@PathVariable("tenantId") final String tenantId) {
-        if(this.isTenantAdmin() || tenantId.equals(this.getTenantId())) {
+    public ResponseEntity<?> read(@PathVariable("tenantId") final UUID tenantId) {
+        if (this.isSuperAdmin() || tenantId.equals(this.getTenantId())) {
             TenantResource resource = this.getRestAdapterV1().readTenant(tenantId);
             return ResponseEntity.ok()
                     .body(resource);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can not access this resource.");
+        }
+    }
+
+    /**
+     * Read response entity.
+     *
+     * @return the response entity
+     */
+    @GetMapping()
+    public ResponseEntity<List<TenantResource>> read() {
+        if (this.isSuperAdmin()) {
+            List<TenantResource> resourceList = this.getRestAdapterV1().readTenants();
+            return ResponseEntity.ok()
+                    .body(resourceList);
+        } else {
+            TenantResource resource = this.getRestAdapterV1().readTenant(this.getTenantId());
+            return ResponseEntity.ok()
+                    .body(Arrays.asList(resource));
         }
     }
 }

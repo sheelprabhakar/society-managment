@@ -3,6 +3,8 @@ package com.c4c.housing.rest.controller;
 import com.c4c.housing.adapter.RestAdapterV1;
 import com.c4c.housing.common.SpringUtil;
 
+import java.util.UUID;
+
 /**
  * The type Base controller.
  */
@@ -22,6 +24,15 @@ public abstract class BaseController {
     }
 
     /**
+     * Is super admin boolean.
+     *
+     * @return the boolean
+     */
+    boolean isSuperAdmin() {
+        return SpringUtil.isSuperAdmin();
+    }
+
+    /**
      * Is tenant admin boolean.
      *
      * @return the boolean
@@ -35,7 +46,7 @@ public abstract class BaseController {
      *
      * @return the tenant id
      */
-    String getTenantId() {
+    UUID getTenantId() {
         return SpringUtil.getTenantId();
     }
 

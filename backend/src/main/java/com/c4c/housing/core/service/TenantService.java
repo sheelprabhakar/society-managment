@@ -2,6 +2,9 @@ package com.c4c.housing.core.service;
 
 import com.c4c.housing.core.entity.TenantEntity;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * The interface Tenant service.
  */
@@ -21,4 +24,19 @@ public interface TenantService {
      * @return the tenant entity
      */
     TenantEntity update(TenantEntity tenantEntity);
+
+    /**
+     * Read tenant entity.
+     *
+     * @param tenantId the tenant id
+     * @return the tenant entity
+     */
+    TenantEntity read(UUID tenantId);
+
+    /**
+     * Read all list.
+     *
+     * @return the list
+     */
+    List<TenantEntity> readAll();
 }

@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -187,9 +189,11 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
 
         tenantEntity = this.tenantService.create(tenantEntity);
 
-        TenantResource resource = this.exactNameModelMapper.map(this.tenantService.create(tenantEntity),
+        TenantResource resource = this.mapModel(this.tenantService.create(tenantEntity),
                 TenantResource.class);
-        resource.setCityId(tenantEntity.getCity().getId());
+        if(!Objects.isNull(resource)) {
+            resource.setCityId(tenantEntity.getCity().getId());
+        }
         return resource;
     }
 
@@ -200,9 +204,11 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      * @return the tenant entity
      */
     private TenantEntity getTenantEntity(TenantResource tenantResource) {
-        TenantEntity tenantEntity = this.exactNameModelMapper.map(tenantResource, TenantEntity.class);
+        TenantEntity tenantEntity = this.mapModel(tenantResource, TenantEntity.class);
         CityEntity cityEntity = this.lookupService.getCityById(tenantResource.getCityId());
-        tenantEntity.setCity(cityEntity);
+        if(!Objects.isNull(tenantEntity)) {
+            tenantEntity.setCity(cityEntity);
+        }
         return tenantEntity;
     }
 
@@ -216,9 +222,11 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     public TenantResource updateTenant(final TenantResource tenantResource) {
         TenantEntity tenantEntity = this.getTenantEntity(tenantResource);
         tenantEntity = this.tenantService.update(tenantEntity);
-        TenantResource resource = this.exactNameModelMapper.map(this.tenantService.create(tenantEntity),
+        TenantResource resource = this.mapModel(this.tenantService.create(tenantEntity),
                 TenantResource.class);
-        resource.setCityId(tenantEntity.getCity().getId());
+        if(!Objects.isNull(resource)) {
+            resource.setCityId(tenantEntity.getCity().getId());
+        }
         return resource;
     }
 
@@ -229,7 +237,38 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      * @return the tenant resource
      */
     @Override
-    public TenantResource readTenant(String tenantId) {
+    public TenantResource readTenant(final UUID tenantId) {
+        TenantEntity tenantEntity = this.tenantService.read(tenantId);
+        TenantResource resource = this.mapModel(tenantEntity,
+                TenantResource.class);
+        resource.setCityId(tenantEntity.getCity().getId());
+        return  resource;
+    }
+
+    /**
+     * Read tenants list.
+     *
+     * @return the list
+     */
+    @Override
+    public List<TenantResource> readTenants() {
+        List<TenantEntity> tenantEntities = this.tenantService.readAll();
         return null;
+    }
+
+    /**
+     * Map model d.
+     *
+     * @param <D>             the type parameter
+     * @param source          the source
+     * @param destinationType the destination type
+     * @return the d
+     */
+    private <D> D mapModel(Object source, Class<D> destinationType) {
+        if(Objects.isNull(source))
+            return null;
+        else {
+            return this.exactNameModelMapper.map(source, destinationType);
+        }
     }
 }
