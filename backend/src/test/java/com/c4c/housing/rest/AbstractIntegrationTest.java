@@ -89,6 +89,9 @@ public abstract class AbstractIntegrationTest {
         registry.add("memcached.cache.provider", ()->String.valueOf("static"));*/
     }
 
+    /**
+     * Init.
+     */
     @PostConstruct
     void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -120,6 +123,14 @@ public abstract class AbstractIntegrationTest {
 
     }
 
+    /**
+     * Post mock http servlet request builder.
+     *
+     * @param baseUrl  the base url
+     * @param resource the resource
+     * @return the mock http servlet request builder
+     * @throws Exception the exception
+     */
     MockHttpServletRequestBuilder post(final String baseUrl, Object resource) throws Exception {
         return MockMvcRequestBuilders
                 .post(baseUrl)
@@ -129,6 +140,21 @@ public abstract class AbstractIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
+    MockHttpServletRequestBuilder get(final String url) throws Exception {
+        return MockMvcRequestBuilders
+                .get(url)
+                .header("Authorization", getAdminToken())
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    /**
+     * Put mock http servlet request builder.
+     *
+     * @param baseUrl  the base url
+     * @param resource the resource
+     * @return the mock http servlet request builder
+     * @throws Exception the exception
+     */
     MockHttpServletRequestBuilder put(final String baseUrl, Object resource) throws Exception {
         return MockMvcRequestBuilders
                 .put(baseUrl)

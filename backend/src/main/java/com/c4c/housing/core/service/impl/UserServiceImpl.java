@@ -1,9 +1,11 @@
 package com.c4c.housing.core.service.impl;
 
-import com.c4c.housing.core.entity.RoleEntity;
+import com.c4c.housing.common.SpringUtil;
+import com.c4c.housing.core.entity.TenantUserEntity;
 import com.c4c.housing.core.entity.UserEntity;
-import com.c4c.housing.core.entity.UserRoleEntity;
+import com.c4c.housing.core.repository.TenantUserRepository;
 import com.c4c.housing.core.repository.UserRepository;
+import com.c4c.housing.core.service.TenantUserService;
 import com.c4c.housing.core.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -39,16 +40,22 @@ public class UserServiceImpl implements UserService {
      */
     private final PasswordEncoder passwordEncoder;
 
+    private final TenantUserService tenantUserService;
     /**
      * Instantiates a new User service.
      *
-     * @param userRepository  the user repository
-     * @param passwordEncoder the password encoder
+     * @param userRepository             the user repository
+     * @param tenantUserEntityRepository the tenant user entity repository
+     * @param passwordEncoder            the password encoder
      */
     @Autowired
-    public UserServiceImpl(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(final UserRepository userRepository,
+                           TenantUserRepository tenantUserEntityRepository,
+                           final PasswordEncoder passwordEncoder,
+                           final TenantUserService tenantUserService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tenantUserService = tenantUserService;
     }
 
     /**
@@ -66,8 +73,13 @@ public class UserServiceImpl implements UserService {
             // Add default User Role
             // To-do
         }
-        return this.userRepository.save(userEntity);
+        UserEntity entity = this.userRepository.save(userEntity);
+        if(Objects.nonNull( SpringUtil.getTenantId())) {
+            TenantUserEntity tenantUserEntity = this.tenantUserService.save(SpringUtil.getTenantId(), userEntity.getId());
+        }
+        return entity;
     }
+
 
     /**
      * Find by id user entity.

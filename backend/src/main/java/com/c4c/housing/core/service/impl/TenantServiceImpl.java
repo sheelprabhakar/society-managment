@@ -5,6 +5,7 @@ import com.c4c.housing.core.entity.TenantEntity;
 import com.c4c.housing.core.entity.UserEntity;
 import com.c4c.housing.core.repository.TenantRepository;
 import com.c4c.housing.core.service.TenantService;
+import com.c4c.housing.core.service.TenantUserService;
 import com.c4c.housing.core.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,15 +33,22 @@ public class TenantServiceImpl implements TenantService {
     private final UserService userService;
 
     /**
+     * The Tenant user service.
+     */
+    private final TenantUserService tenantUserService;
+
+    /**
      * Instantiates a new Tenant service.
      *
-     * @param tenantRepository the tenant repository
-     * @param userService      the user service
+     * @param tenantRepository  the tenant repository
+     * @param userService       the user service
+     * @param tenantUserService the tenant user service
      */
     public TenantServiceImpl(final TenantRepository tenantRepository,
-                             final UserService userService) {
+                             final UserService userService, final TenantUserService tenantUserService) {
         this.tenantRepository = tenantRepository;
         this.userService = userService;
+        this.tenantUserService = tenantUserService;
     }
 
 
@@ -53,22 +61,23 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public TenantEntity create(final TenantEntity tenantEntity) {
         tenantEntity.setActive(true);
-        return this.getTenantEntity(tenantEntity);
+        return this.saveTenantEntity(tenantEntity);
     }
 
     /**
-     * Gets tenant entity.
+     * Save tenant entity tenant entity.
      *
      * @param tenantEntity the tenant entity
      * @return the tenant entity
      */
-    private TenantEntity getTenantEntity(final TenantEntity tenantEntity) {
+    private TenantEntity saveTenantEntity(final TenantEntity tenantEntity) {
         TenantEntity entity = this.tenantRepository.save(tenantEntity);
         // If User not register then automatically register admin user
-        if (Objects.isNull(this.userService.findByEmail(tenantEntity.getEmail()))) {
-            UserEntity userEntity = getNewUserEntity(tenantEntity);
-            this.userService.save(userEntity);
+        if (Objects.isNull(this.userService.findByEmail(entity.getEmail()))) {
+            UserEntity userEntity = getNewUserEntity(entity);
+            userEntity = this.userService.save(userEntity);
             // Todo: implement mapping of user to tenant
+            this.tenantUserService.save(entity.getId(), userEntity.getId());
         }
         return entity;
     }
@@ -81,7 +90,7 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public TenantEntity update(final TenantEntity tenantEntity) {
-        return this.getTenantEntity(tenantEntity);
+        return this.saveTenantEntity(tenantEntity);
     }
 
     /**

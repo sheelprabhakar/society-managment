@@ -10,3 +10,4 @@ services:
       APP_ENV: dev
       MYSQL_ROOT_PASSWORD: Password4
     container_name: mysql-db
+    restart: always

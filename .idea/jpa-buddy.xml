@@ -3,7 +3,7 @@
   <component name="JpaBuddyIdeaProjectConfig" newRepositoryParent="org.springframework.data.jpa.repository.JpaRepository">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
-    <option name="reverseEngineeringLastDbConnectionId" value="2baf4333-2a22-4ab8-bd07-ba055b01faa3" />
+    <option name="reverseEngineeringLastDbConnectionId" value="2baf4333-2a22-4ab8-bd07-ba055b01faa3__societydb" />
     <option name="reLastEntityCreationPackage" value="backend/src/main/java/com/c4c/housing/core/entity" />
     <option name="newEntityIdStrategy" value="UUID" />
   </component>

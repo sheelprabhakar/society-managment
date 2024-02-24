@@ -110,3 +110,24 @@ CREATE TABLE `tenant` (
           REFERENCES `cities` (`id`)
           ON DELETE NO ACTION
           ON UPDATE NO ACTION);
+
+
+CREATE TABLE `tenant_user` (
+           `tenant_id` VARCHAR(36) NOT NULL,
+           `user_id` VARCHAR(36) NOT NULL,
+           `created_at` TIMESTAMP NULL,
+           `update_at` TIMESTAMP NULL,
+           `created_by` VARCHAR(255) NULL,
+           `updated_by` VARCHAR(255) NULL,
+           PRIMARY KEY (`tenant_id`, `user_id`),
+           INDEX `fk_tenant_user_user_id_idx` (`user_id` ASC) VISIBLE,
+           CONSTRAINT `fk_tenant_user_tenant_id`
+               FOREIGN KEY (`tenant_id`)
+                   REFERENCES `tenant` (`id`)
+                   ON DELETE CASCADE
+                   ON UPDATE NO ACTION,
+           CONSTRAINT `fk_tenant_user_user_id`
+               FOREIGN KEY (`user_id`)
+                   REFERENCES `user` (`id`)
+                   ON DELETE CASCADE
+                   ON UPDATE NO ACTION);

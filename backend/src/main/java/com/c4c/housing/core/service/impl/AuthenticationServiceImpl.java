@@ -99,6 +99,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             encodePwd = userEntity.getPasswordHash();
         }
         if (this.passwordEncoder.matches(password, encodePwd)) {
+            this.userService.clearOTP(userEntity);
             final UserDetails userDetails = this.userDetailsService
                     .loadUserByUsername(username);
             log.info("Authenticated successfully");

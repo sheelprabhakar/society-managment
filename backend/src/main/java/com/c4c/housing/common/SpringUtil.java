@@ -7,6 +7,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -51,9 +52,10 @@ public final class SpringUtil {
         RequestAttributes attribs = RequestContextHolder.getRequestAttributes();
         if (attribs != null) {
             HttpServletRequest request = ((ServletRequestAttributes) attribs).getRequest();
-            return UUID.fromString(request.getHeader("X-TENANT-ID"));
-        } else {
-            return null;
+            if (Objects.nonNull(request.getHeader("X-TENANT-ID"))) {
+                return UUID.fromString(request.getHeader("X-TENANT-ID"));
+            }
         }
+        return null;
     }
 }
