@@ -42,7 +42,7 @@ public class UserTokenServiceImpl implements UserTokenService {
      * @return the by id
      */
     @Override
-    @Cacheable(value = "tokens", key = "#id.toString()")
+    @Cacheable(value = "tokens", key = "#p0")
     public UserTokenEntity getById(final UUID id) {
         return this.userTokenRepository.findById(id).orElse(null);
     }
@@ -56,7 +56,7 @@ public class UserTokenServiceImpl implements UserTokenService {
      * @return the user token entity
      */
     @Override
-    @CacheEvict(value = "tokens", key = "#id.toString()")
+    @CacheEvict(value = "tokens", key = "#p0")
     public UserTokenEntity update(final UUID id, final String token, final String refreshToken) {
         UserTokenEntity tokenEntity = this.userTokenRepository.findById(id).orElse(null);
         if (tokenEntity == null) {

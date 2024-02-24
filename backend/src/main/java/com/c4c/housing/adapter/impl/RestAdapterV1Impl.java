@@ -114,9 +114,9 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public JwtResponse authenticate(final JwtRequest request) throws Exception {
-        return this.exactNameModelMapper.map(
+        return TokenConverter.authSuccessInfoToJwtResponse(
                 this.authenticationService.authenticate(request.getUsername(),
-                request.getPassword(), request.isOtp()), JwtResponse.class);
+                request.getPassword(), request.isOtp()));
     }
 
     /**
@@ -135,8 +135,8 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      */
     @Override
     public JwtResponse refreshToken(final String refreshToken) {
-        return this.exactNameModelMapper.map(
-                this.authenticationService.refreshToken(refreshToken), JwtResponse.class);
+        return TokenConverter.authSuccessInfoToJwtResponse(
+                this.authenticationService.refreshToken(refreshToken));
     }
 
     /**
@@ -239,10 +239,14 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     @Override
     public TenantResource readTenant(final UUID tenantId) {
         TenantEntity tenantEntity = this.tenantService.read(tenantId);
+        return this.getTenantResource(tenantEntity);
+    }
+
+    private TenantResource getTenantResource(TenantEntity tenantEntity) {
         TenantResource resource = this.mapModel(tenantEntity,
                 TenantResource.class);
         resource.setCityId(tenantEntity.getCity().getId());
-        return  resource;
+        return resource;
     }
 
     /**
@@ -253,7 +257,8 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     @Override
     public List<TenantResource> readTenants() {
         List<TenantEntity> tenantEntities = this.tenantService.readAll();
-        return null;
+        return tenantEntities.stream().map(tenantEntity -> this.mapModel(tenantEntity, TenantResource.class))
+                .collect(Collectors.toList());
     }
 
     /**

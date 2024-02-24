@@ -4,6 +4,7 @@ import com.c4c.housing.HousingSocietyApplication;
 import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
 import com.c4c.housing.utils.TestUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.StringUtils;
 import org.testcontainers.containers.MySQLContainer;
@@ -116,5 +118,23 @@ public abstract class AbstractIntegrationTest {
         }
         return token;
 
+    }
+
+    MockHttpServletRequestBuilder post(final String baseUrl, Object resource) throws Exception {
+        return MockMvcRequestBuilders
+                .post(baseUrl)
+                .content(TestUtils.convertObjectToJsonString(resource))
+                .header("Authorization", getAdminToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    MockHttpServletRequestBuilder put(final String baseUrl, Object resource) throws Exception {
+        return MockMvcRequestBuilders
+                .put(baseUrl)
+                .content(TestUtils.convertObjectToJsonString(resource))
+                .header("Authorization", getAdminToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
     }
 }

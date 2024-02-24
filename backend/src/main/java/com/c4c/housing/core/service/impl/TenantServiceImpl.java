@@ -95,6 +95,11 @@ public class TenantServiceImpl implements TenantService {
         return this.tenantRepository.findById(tenantId).get();
     }
 
+    /**
+     * Read all list.
+     *
+     * @return the list
+     */
     @Override
     public List<TenantEntity> readAll() {
         return this.tenantRepository.findAll();
