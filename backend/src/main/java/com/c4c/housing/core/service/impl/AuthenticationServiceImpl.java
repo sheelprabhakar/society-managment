@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import java.util.Set;
  */
 @Service
 @Slf4j
+@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
     /**
      * The Jwt token provider.
@@ -97,6 +99,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             encodePwd = userEntity.getPasswordHash();
         }
         if (this.passwordEncoder.matches(password, encodePwd)) {
+            this.userService.clearOTP(userEntity);
             final UserDetails userDetails = this.userDetailsService
                     .loadUserByUsername(username);
             log.info("Authenticated successfully");

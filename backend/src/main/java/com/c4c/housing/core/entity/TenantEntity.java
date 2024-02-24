@@ -1,10 +1,16 @@
 package com.c4c.housing.core.entity;
 
+import com.c4c.housing.core.entity.lookup.CityEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +18,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -51,12 +58,14 @@ public class TenantEntity extends CommonEntityAttributes implements Serializable
      * The Name.
      */
     @Column(name = "name", length = L255, nullable = false)
+    @NotNull
     private String name;
 
     /**
      * The Email.
      */
     @Column(name = "email", length = L255, nullable = false)
+    @NotNull
     private String email;
 
     /**
@@ -78,8 +87,64 @@ public class TenantEntity extends CommonEntityAttributes implements Serializable
     private String phone;
 
     /**
-     * The Is active.
+     * The Short name.
      */
-    @Column(name = "is_active", nullable = true)
-    private Boolean isActive;
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "short_name", nullable = false, length = 45)
+    private String shortName;
+
+    /**
+     * The Area.
+     */
+    @Size(max = 255)
+    @Column(name = "area")
+    private String area;
+
+    /**
+     * The Landmark.
+     */
+    @Size(max = 45)
+    @Column(name = "landmark", length = 45)
+    private String landmark;
+
+    /**
+     * The City.
+     */
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "city_id", nullable = false)
+    private CityEntity city;
+
+    /**
+     * The Picture url.
+     */
+    @Size(max = 2048)
+    @Column(name = "picture_url", length = 2048)
+    private String pictureUrl;
+
+    /**
+     * The Latitude.
+     */
+    @Column(name = "latitude", precision = 10, scale = 8)
+    private BigDecimal latitude;
+
+    /**
+     * The Longitude.
+     */
+    @Column(name = "longitude", precision = 10, scale = 8)
+    private BigDecimal longitude;
+
+    /**
+     * The Active.
+     */
+    @NotNull
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
+    @Size(max = 15)
+    @NotNull
+    @Column(name = "mobile", nullable = false, length = 15)
+    private String mobile;
+
 }

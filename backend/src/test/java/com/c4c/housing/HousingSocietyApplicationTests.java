@@ -33,10 +33,8 @@ class HousingSocietyApplicationTests {
         System.out.println(passwordEncoder.encode("admin123"));
 
         for (UserEntity userEntity : userRepository.findAll()) {
-
             System.out.println(userEntity.getRoles().get(0));
         }
-
     }
 
 }

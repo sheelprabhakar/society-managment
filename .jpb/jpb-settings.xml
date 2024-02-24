@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpaPluginProjectSettings" dtoClassNamePostfix="Resource" dtoCommentRegexp="Resource for (?:the )?\{@link (?&lt;entity&gt;.*)\} ." dtoNamePatternRegexp="(?&lt;entity&gt;.*)(?:Dto|DTO|Resource|VO|Vo|View|Request|Response|Browse|Edit)" dtoClassComment="Resource for {@link ${ENTITY_FQN}}" />
+</project>

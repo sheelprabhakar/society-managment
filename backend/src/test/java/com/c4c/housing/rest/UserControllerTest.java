@@ -42,12 +42,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     public void test_add_user_ok() throws Exception {
         UserResource resource = UserResourceHelper.getNew(null);
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post(BASE_URL)
-                        .content(TestUtils.convertObjectToJsonString(resource))
-                        .header("Authorization", getAdminToken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(this.post(BASE_URL, resource))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mobile").value(resource.getMobile()));
@@ -61,12 +56,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
     @Test
     public void test_update_user_ok() throws Exception {
         UserResource resource = UserResourceHelper.getNew(null);
-        MvcResult mvcResult = this.mockMvc.perform(MockMvcRequestBuilders
-                        .post(BASE_URL)
-                        .header("Authorization", getAdminToken())
-                        .content(TestUtils.convertObjectToJsonString(resource))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        MvcResult mvcResult = this.mockMvc.perform(this.post(BASE_URL, resource))
                 //.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mobile").value(resource.getMobile())).andReturn();
@@ -74,12 +64,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .convertJsonStringToObject(mvcResult.getResponse()
                         .getContentAsString(), UserResource.class);
         userResource.setMobile("1234567890");
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .put(BASE_URL)
-                        .header("Authorization", getAdminToken())
-                        .content(TestUtils.convertObjectToJsonString(userResource))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(this.put(BASE_URL, userResource))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.mobile").value("1234567890"));

@@ -4,6 +4,7 @@ import com.c4c.housing.HousingSocietyApplication;
 import com.c4c.housing.config.security.JwtTokenProvider;
 import com.c4c.housing.rest.resource.auth.JwtResponse;
 import com.c4c.housing.utils.TestUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.StringUtils;
 import org.testcontainers.containers.MySQLContainer;
@@ -87,6 +89,9 @@ public abstract class AbstractIntegrationTest {
         registry.add("memcached.cache.provider", ()->String.valueOf("static"));*/
     }
 
+    /**
+     * Init.
+     */
     @PostConstruct
     void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -116,5 +121,46 @@ public abstract class AbstractIntegrationTest {
         }
         return token;
 
+    }
+
+    /**
+     * Post mock http servlet request builder.
+     *
+     * @param baseUrl  the base url
+     * @param resource the resource
+     * @return the mock http servlet request builder
+     * @throws Exception the exception
+     */
+    MockHttpServletRequestBuilder post(final String baseUrl, Object resource) throws Exception {
+        return MockMvcRequestBuilders
+                .post(baseUrl)
+                .content(TestUtils.convertObjectToJsonString(resource))
+                .header("Authorization", getAdminToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    MockHttpServletRequestBuilder get(final String url) throws Exception {
+        return MockMvcRequestBuilders
+                .get(url)
+                .header("Authorization", getAdminToken())
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
+    /**
+     * Put mock http servlet request builder.
+     *
+     * @param baseUrl  the base url
+     * @param resource the resource
+     * @return the mock http servlet request builder
+     * @throws Exception the exception
+     */
+    MockHttpServletRequestBuilder put(final String baseUrl, Object resource) throws Exception {
+        return MockMvcRequestBuilders
+                .put(baseUrl)
+                .content(TestUtils.convertObjectToJsonString(resource))
+                .header("Authorization", getAdminToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
     }
 }

@@ -1,5 +1,6 @@
 package com.c4c.housing.core.service;
 
+import com.c4c.housing.core.entity.TenantUserEntity;
 import com.c4c.housing.core.entity.UserEntity;
 
 import java.util.UUID;

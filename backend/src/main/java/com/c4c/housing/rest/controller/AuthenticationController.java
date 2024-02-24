@@ -20,15 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController()
 @RequestMapping(AuthenticationController.BASE_URL)
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
     /**
      * The Base url.
      */
     static final String BASE_URL = "/api/v1/auth";
-    /**
-     * The Rest adapter v 1.
-     */
-    private final RestAdapterV1 restAdapterV1;
 
     /**
      * Instantiates a new Authentication controller.
@@ -37,7 +33,7 @@ public class AuthenticationController {
      */
     @Autowired
     public AuthenticationController(final RestAdapterV1 restAdapterV1) {
-        this.restAdapterV1 = restAdapterV1;
+        super(restAdapterV1);
     }
 
     /**
@@ -50,7 +46,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> authenticate(final @Valid @RequestBody
                                                         JwtRequest authenticationRequest) throws Exception {
-        JwtResponse jwtResponse = this.restAdapterV1.authenticate(authenticationRequest);
+        JwtResponse jwtResponse = this.getRestAdapterV1().authenticate(authenticationRequest);
         return ResponseEntity.ok(jwtResponse);
     }
 
@@ -62,7 +58,7 @@ public class AuthenticationController {
      */
     @GetMapping("/logout")
     public ResponseEntity<?> logout() throws Exception {
-        this.restAdapterV1.logout();
+        this.getRestAdapterV1().logout();
         return ResponseEntity.ok("Logged out successfully");
     }
 
@@ -75,7 +71,7 @@ public class AuthenticationController {
      */
     @PostMapping("/refreshToken")
     public ResponseEntity<JwtResponse> refreshToken(final @RequestParam String refreshToken) throws Exception {
-        JwtResponse jwtResponse = this.restAdapterV1.refreshToken(refreshToken);
+        JwtResponse jwtResponse = this.getRestAdapterV1().refreshToken(refreshToken);
         return ResponseEntity.ok(jwtResponse);
     }
 

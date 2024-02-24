@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/tenant").hasAuthority("SUPER_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "tenant").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/tenant").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults())
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)

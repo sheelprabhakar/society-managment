@@ -40,7 +40,7 @@ public class UserResourceHelper {
         resource.setMobile(MOBILE + c);
         resource.setProfile("");
         resource.setLastLogin(null);
-
+        resource.setUserName("username"+c);
         resource.setLastName("prabhakar");
         resource.setMiddleName("s");
         resource.setPasswordHash("");
