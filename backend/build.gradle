@@ -54,9 +54,6 @@ dependencies {
 	testImplementation 'org.testcontainers:testcontainers:1.18.3'
 	testImplementation 'org.testcontainers:mysql:1.18.3'
 }
-checkstyle {
-	toolVersion '7.1.1'
-}
 tasks.named('test') {
 	useJUnitPlatform()
 }

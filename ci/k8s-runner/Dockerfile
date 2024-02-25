@@ -15,16 +15,13 @@
 
 FROM ubuntu:22.04
 
-RUN apt-get update --fix-missing 
-RUN apt-get install software-properties-common -y
-RUN apt-add-repository -y ppa:ansible/ansible
 RUN   apt-get update && \
     apt-get -y install curl \
     iputils-ping \
     tar \
     jq \
     python3 \
-    ansible
+    openjdk-18-jdk
 
 ARG GH_RUNNER_VERSION="2.313.0"
 WORKDIR /runner

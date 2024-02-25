@@ -13,21 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-: 'REPO_OWNER="bimbim-in"
-REPO_NAME="test"
-GITHUB_TOKEN="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"
-ACTIONS_RUNNER_INPUT_URL="https://github.com/bimbim-in/test"
-'
+REPO_OWNER="sheelprabhakar"
+REPO_NAME="society-managment"
+ACTIONS_RUNNER_INPUT_URL="https://github.com/sheelprabhakar/society-managment"
 
 #set name for this runner as the hostname
 # shellcheck disable=SC2034
 # ACTIONS_RUNNER_INPUT_NAME is used by config.sh
-ACTIONS_RUNNER_INPUT_NAME=$HOSTNAME
+ACTIONS_RUNNER_INPUT_NAME="sheel-gharunner"
 #get regsistration token for this runnner
 echo "https://api.github.com/orgs/${REPO_OWNER}/actions/runners/registration-token"
 ACTIONS_RUNNER_INPUT_TOKEN="$(curl -sS --request POST --url "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/actions/runners/registration-token" --header "authorization: Bearer ${GITHUB_TOKEN}"  --header 'content-type: application/json' | jq -r .token)"
 #ACTIONS_RUNNER_INPUT_TOKEN="$(curl -sS --request POST --url "https://api.github.com/orgs/${REPO_OWNER}/actions/runners/registration-token" --header "authorization: Bearer ${GITHUB_TOKEN}"  --header 'content-type: application/json' | jq -r .token)"
-echo $ACTIONS_RUNNER_INPUT_TOKEN
+#echo $ACTIONS_RUNNER_INPUT_TOKEN
 #configure runner
 /runner/config.sh --unattended --replace --work "/tmp" --url "$ACTIONS_RUNNER_INPUT_URL" --token "$ACTIONS_RUNNER_INPUT_TOKEN"
 #start runner

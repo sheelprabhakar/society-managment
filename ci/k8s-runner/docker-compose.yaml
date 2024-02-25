@@ -1,0 +1,10 @@
+services:
+  sheel-gharunner:
+    image : sheelprabhakar/gharunner
+    volumes:
+      - ~/gha/home:/home/ghrunner
+      - ~/gha/_work:/tmp
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    container_name: sheel-gharunner
+    restart: always
