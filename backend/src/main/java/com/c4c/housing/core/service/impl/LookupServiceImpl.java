@@ -85,7 +85,7 @@ public class LookupServiceImpl implements LookupService {
      * @return the city by id
      */
     @Override
-    public CityEntity getCityById(int cityId) {
+    public CityEntity getCityById(final int cityId) {
         return this.cityRepository.findById(cityId).get();
     }
 }

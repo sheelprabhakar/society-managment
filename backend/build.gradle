@@ -60,7 +60,9 @@ tasks.named('test') {
 tasks.named("bootJar") {
 	launchScript()
 }
-
+checkstyle {
+	ignoreFailures = true
+}
 tasks.withType(Checkstyle) {
 	checkstyleTest.enabled = false
 	reports {

@@ -142,6 +142,9 @@ public class TenantEntity extends CommonEntityAttributes implements Serializable
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    /**
+     * The Mobile.
+     */
     @Size(max = 15)
     @NotNull
     @Column(name = "mobile", nullable = false, length = 15)

@@ -29,7 +29,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle Wrapper
 
-      run:  ./gradlew build -x checkstyleMain -x test
+      run:  ./gradlew build
 
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
@@ -40,4 +40,5 @@ jobs:
     #    USERNAME: ${{ github.actor }}
     #    TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
-      run: docker build . --file backend/Dockerfile --tag sheelprabhakar/society-management:$(date +%s)
+      run: docker build . --file backend/Dockerfile --tag sheelprabhakar/society-management:latest
+    # run: docker build . --file backend/Dockerfile --tag sheelprabhakar/society-management:$(date +%s)

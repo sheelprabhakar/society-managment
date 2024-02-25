@@ -40,17 +40,22 @@ public class UserServiceImpl implements UserService {
      */
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * The Tenant user service.
+     */
     private final TenantUserService tenantUserService;
+
     /**
      * Instantiates a new User service.
      *
      * @param userRepository             the user repository
      * @param tenantUserEntityRepository the tenant user entity repository
      * @param passwordEncoder            the password encoder
+     * @param tenantUserService          the tenant user service
      */
     @Autowired
     public UserServiceImpl(final UserRepository userRepository,
-                           TenantUserRepository tenantUserEntityRepository,
+                           final TenantUserRepository tenantUserEntityRepository,
                            final PasswordEncoder passwordEncoder,
                            final TenantUserService tenantUserService) {
         this.userRepository = userRepository;
@@ -69,13 +74,14 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.hasLength(userEntity.getPasswordHash())) {
             userEntity.setPasswordHash(this.passwordEncoder.encode(userEntity.getPasswordHash()));
         }
-        if(Objects.isNull( userEntity.getRoles()) || userEntity.getRoles().size() == 0){
+        /*if (Objects.isNull(userEntity.getRoles()) || userEntity.getRoles().size() == 0) {
             // Add default User Role
             // To-do
-        }
+        }*/
         UserEntity entity = this.userRepository.save(userEntity);
-        if(Objects.nonNull( SpringUtil.getTenantId())) {
-            TenantUserEntity tenantUserEntity = this.tenantUserService.save(SpringUtil.getTenantId(), userEntity.getId());
+        if (Objects.nonNull(SpringUtil.getTenantId())) {
+            TenantUserEntity tenantUserEntity = this.tenantUserService
+                    .save(SpringUtil.getTenantId(), userEntity.getId());
         }
         return entity;
     }
