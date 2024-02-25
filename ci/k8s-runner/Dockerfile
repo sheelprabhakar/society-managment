@@ -24,6 +24,7 @@ RUN apt-get update && \
     gnupg2 \
     iputils-ping \
     software-properties-common
+RUN apt-get -y install openjdk-21-jdk
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \

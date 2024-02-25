@@ -40,4 +40,4 @@ jobs:
     #    USERNAME: ${{ github.actor }}
     #    TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sheelprabhakar/society-management:$(date +%s)
+      run: docker build . --file backend/Dockerfile --tag sheelprabhakar/society-management:$(date +%s)
