@@ -1,0 +1,8 @@
+include:
+  - mysql/compose.yaml
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379"

@@ -1,6 +1,0 @@
-services:
-  mem:
-    image: memcached:1.6.23
-    ports:
-      - "11211:11211"
-    restart: always
