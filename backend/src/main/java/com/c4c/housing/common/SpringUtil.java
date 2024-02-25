@@ -44,6 +44,16 @@ public final class SpringUtil {
     }
 
     /**
+     * Gets loggedin user.
+     *
+     * @return the loggedin user
+     */
+    public static String getLoggedinUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (String) authentication.getPrincipal();
+    }
+
+    /**
      * Gets tenant id.
      *
      * @return the tenant id
