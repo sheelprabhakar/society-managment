@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController()
 @RequestMapping(LookupController.BASE_URL)
-public class LookupController extends BaseController{
+public class LookupController extends BaseController {
     /**
      * The Base url.
      */
@@ -56,13 +56,22 @@ public class LookupController extends BaseController{
      * @throws Exception the exception
      */
     @GetMapping("/country/{countryId}/state")
-    public ResponseEntity<List<StateResource>> states(@PathVariable("countryId") int countryId) throws Exception {
+    public ResponseEntity<List<StateResource>> states(
+            final @PathVariable("countryId") int countryId) throws Exception {
         List<StateResource> stateResources = this.getRestAdapterV1().states(countryId);
         return ResponseEntity.ok(stateResources);
     }
 
+    /**
+     * Cities response entity.
+     *
+     * @param stateId the state id
+     * @return the response entity
+     * @throws Exception the exception
+     */
     @GetMapping("/state/{stateId}/city")
-    public ResponseEntity<List<CityResource>> cities(@PathVariable("stateId") int stateId) throws Exception {
+    public ResponseEntity<List<CityResource>> cities(
+            final @PathVariable("stateId") int stateId) throws Exception {
         List<CityResource> cityResources = this.getRestAdapterV1().cities(stateId);
         return ResponseEntity.ok(cityResources);
     }

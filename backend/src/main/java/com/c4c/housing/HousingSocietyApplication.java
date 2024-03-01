@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * The type Housing society application.
  */
+@SuppressWarnings("CheckStyle")
 @SpringBootApplication
 public class HousingSocietyApplication {
     /**

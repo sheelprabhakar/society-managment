@@ -4,6 +4,7 @@ services:
     volumes:
       - ~/gha/home:/home/ghrunner
       - ~/gha/_work:/tmp
+      - /var/run/docker.sock.raw:/var/run/docker.sock
     environment:
       GITHUB_TOKEN: ${GITHUB_TOKEN}
     container_name: sheel-gharunner

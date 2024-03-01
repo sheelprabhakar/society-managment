@@ -14,14 +14,22 @@
 # Download and verify the integrity of the download first
 
 FROM ubuntu:22.04
-
-RUN   apt-get update && \
-    apt-get -y install curl \
-    iputils-ping \
+RUN apt-get update && \
+    apt-get -y install apt-transport-https \
+    ca-certificates \
+    curl \
     tar \
     jq \
-    python3 \
-    openjdk-18-jdk
+    build-essential \
+    gnupg2 \
+    iputils-ping \
+    software-properties-common
+RUN apt-get -y install openjdk-21-jdk
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
+    apt-get update && \
+    apt-get -y install docker-ce
 
 ARG GH_RUNNER_VERSION="2.313.0"
 WORKDIR /runner
@@ -31,8 +39,6 @@ RUN curl -o actions.tar.gz --location "https://github.com/actions/runner/release
     ./bin/installdependencies.sh
 
 COPY entrypoint.sh .
+ENV RUNNER_ALLOW_RUNASROOT=1
 RUN chmod +x entrypoint.sh
-
-RUN useradd ghrunner && chown -R ghrunner: /runner
-USER ghrunner
 ENTRYPOINT ["/runner/entrypoint.sh"]

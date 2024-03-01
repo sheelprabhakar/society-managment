@@ -88,7 +88,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     @Override
     public UserResource save(final UserResource userResource) {
         return this.exactNameModelMapper.map(this.userService.save(
-                this.exactNameModelMapper.map(userResource, UserEntity.class)),
+                        this.exactNameModelMapper.map(userResource, UserEntity.class)),
                 UserResource.class);
     }
 
@@ -101,7 +101,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     @Override
     public UserResource update(final UserResource userResource) {
         return this.exactNameModelMapper.map(this.userService.update(
-                this.exactNameModelMapper.map(userResource, UserEntity.class)),
+                        this.exactNameModelMapper.map(userResource, UserEntity.class)),
                 UserResource.class);
     }
 
@@ -116,7 +116,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
     public JwtResponse authenticate(final JwtRequest request) throws Exception {
         return TokenConverter.authSuccessInfoToJwtResponse(
                 this.authenticationService.authenticate(request.getUsername(),
-                request.getPassword(), request.isOtp()));
+                        request.getPassword(), request.isOtp()));
     }
 
     /**
@@ -191,7 +191,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
 
         TenantResource resource = this.mapModel(this.tenantService.create(tenantEntity),
                 TenantResource.class);
-        if(!Objects.isNull(resource)) {
+        if (!Objects.isNull(resource)) {
             resource.setCityId(tenantEntity.getCity().getId());
         }
         return resource;
@@ -203,10 +203,10 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      * @param tenantResource the tenant resource
      * @return the tenant entity
      */
-    private TenantEntity getTenantEntity(TenantResource tenantResource) {
+    private TenantEntity getTenantEntity(final TenantResource tenantResource) {
         TenantEntity tenantEntity = this.mapModel(tenantResource, TenantEntity.class);
         CityEntity cityEntity = this.lookupService.getCityById(tenantResource.getCityId());
-        if(!Objects.isNull(tenantEntity)) {
+        if (!Objects.isNull(tenantEntity)) {
             tenantEntity.setCity(cityEntity);
         }
         return tenantEntity;
@@ -224,7 +224,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
         tenantEntity = this.tenantService.update(tenantEntity);
         TenantResource resource = this.mapModel(this.tenantService.create(tenantEntity),
                 TenantResource.class);
-        if(!Objects.isNull(resource)) {
+        if (!Objects.isNull(resource)) {
             resource.setCityId(tenantEntity.getCity().getId());
         }
         return resource;
@@ -242,7 +242,7 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
         return this.getTenantResource(tenantEntity);
     }
 
-    private TenantResource getTenantResource(TenantEntity tenantEntity) {
+    private TenantResource getTenantResource(final TenantEntity tenantEntity) {
         TenantResource resource = this.mapModel(tenantEntity,
                 TenantResource.class);
         resource.setCityId(tenantEntity.getCity().getId());
@@ -269,10 +269,10 @@ public class RestAdapterV1Impl implements RestAdapterV1 {
      * @param destinationType the destination type
      * @return the d
      */
-    private <D> D mapModel(Object source, Class<D> destinationType) {
-        if(Objects.isNull(source))
+    private <D> D mapModel(final Object source, final Class<D> destinationType) {
+        if (Objects.isNull(source)) {
             return null;
-        else {
+        } else {
             return this.exactNameModelMapper.map(source, destinationType);
         }
     }

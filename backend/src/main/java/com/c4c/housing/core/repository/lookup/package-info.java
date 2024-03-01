@@ -1,5 +1,5 @@
 /**
- * Package com.c4c.housing.core.repository.lookup;
+ * Package com.c4c.housing.core.repository.lookup.
  */
 
 package com.c4c.housing.core.repository.lookup;

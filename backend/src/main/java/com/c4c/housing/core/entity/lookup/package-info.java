@@ -1,5 +1,5 @@
 /**
- * Package com.c4c.housing.core.entity.lookup
+ * Package com.c4c.housing.core.entity.lookup.
  */
 
 package com.c4c.housing.core.entity.lookup;

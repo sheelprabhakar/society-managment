@@ -1,7 +1,6 @@
 package com.c4c.housing.core.service.impl;
 
 import com.c4c.housing.core.entity.TenantUserEntity;
-import com.c4c.housing.core.entity.TenantUserEntityId;
 import com.c4c.housing.core.repository.TenantRepository;
 import com.c4c.housing.core.repository.TenantUserRepository;
 import com.c4c.housing.core.service.TenantUserService;

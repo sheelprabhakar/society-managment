@@ -143,6 +143,9 @@ public class UserEntity extends CommonEntityAttributes implements Serializable {
     @JoinColumn(name = "user_id")
     private List<UserRoleEntity> roles;
 
+    /**
+     * The Is deleted.
+     */
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
