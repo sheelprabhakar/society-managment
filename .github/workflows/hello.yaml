@@ -2,7 +2,7 @@ on: [push]
 
 jobs:
   sheelprabhakar_test_job:
-    runs-on: [self-hosted, windows, x64]
+    runs-on: [self-hosted, linux, x64]
     name: A job to say hello
     steps:
       - name: Hello world action step
