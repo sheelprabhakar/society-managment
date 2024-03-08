@@ -28,7 +28,8 @@ jobs:
     #- name: Make gradlew executable
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
-    #  run: chmod +x gradlew
+    - name: Setup Gradle exec
+      run: chmod +x gradlew
     - name: Build with Gradle Wrapper
 
       run:  ./gradlew build -x checkstyleMain test
