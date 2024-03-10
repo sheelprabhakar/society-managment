@@ -38,7 +38,7 @@ public class WebSecurityConfig {
             "/swagger-ui.html",
             "/webjars/**",
             "/v3/api-docs/**",
-            "/actuator/*",
+            "/actuator/**",
             "/swagger-ui/**",
             "/api/v1/auth/authenticate",
             "/api/v1/auth/refreshToken",

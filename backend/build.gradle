@@ -22,7 +22,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	//implementation 'org.springframework.boot:spring-boot-starter-logging'
+
+	implementation 'org.jolokia:jolokia-core:1.7.2'
+
 
 	implementation 'ch.qos.logback:logback-core:1.5.0'
 	implementation 'ch.qos.logback:logback-classic:1.5.0'
